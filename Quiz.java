@@ -21,7 +21,9 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.JToggleButton;
 import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
 
 public class Quiz extends JPanel implements ActionListener {
 	private JTextField textField;
@@ -30,7 +32,7 @@ public class Quiz extends JPanel implements ActionListener {
 	private int _attempts;
 	private int _fails;
 	private int _maxNum;
-	private ArrayList<String> _voices;
+	protected ArrayList<String> _voices;
 	private ArrayList<String> _testList = new ArrayList<String>();
 	private String _voice;
 	private JComboBox<String> _selectVoices;
@@ -64,9 +66,10 @@ public class Quiz extends JPanel implements ActionListener {
 
 		getAccuracy();
 
-		_selectVoices = selectVoice();
+		getVoices();
 		_voice = _voices.get(0);
-
+		
+		//changeVoice("voice_akl_nz_jdt_diphone");
 		this.setBackground(new Color(255, 255, 153));
 		this.setLayout(null);
 
@@ -76,7 +79,7 @@ public class Quiz extends JPanel implements ActionListener {
 		lblQuiz.setBounds(0, 11, 464, 57);
 		this.add(lblQuiz);
 
-		//Level Subtile
+		//Level Subtitle
 		JLabel lblLevel = new JLabel("Level " + _level);
 		lblLevel.setFont(new Font("Comic Sans MS", Font.PLAIN, 16));
 		lblLevel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -107,6 +110,14 @@ public class Quiz extends JPanel implements ActionListener {
 
 		btnSettings.setIcon(new ImageIcon("gear_ss.png"));
 		btnSettings.setBounds(419, 399, 45, 41);
+		btnSettings.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Settings set = new Settings();
+				set.setVisible(true);
+			}
+		});
 		this.add(btnSettings);
 
 		lblCoin.setFont(new Font("Calibri", Font.PLAIN, 15));
@@ -123,7 +134,6 @@ public class Quiz extends JPanel implements ActionListener {
 		lblSpeech1.setIcon(new ImageIcon("test.png"));
 		lblSpeech1.setBounds(17, 110, 320, 69);
 		this.add(lblSpeech1);
-
 
 		btnStatistics.setFont(new Font("Calibri", Font.PLAIN, 18));
 		btnStatistics.setBounds(304, 399, 105, 41);
@@ -277,11 +287,13 @@ public class Quiz extends JPanel implements ActionListener {
 	}
 
 	//Function that allows user to change the voice of festival.
-	private JComboBox<String> selectVoice() throws Exception{
+	private void getVoices() throws Exception{
 
 		Festival f = new Festival("","");
 		_voices = f.listOfVoices();
-
+		
+		
+		/*
 		String[] str = new String[_voices.size()];
 		for(int i = 0;i<_voices.size();i++)str[i]=_voices.get(i);
 
@@ -290,6 +302,7 @@ public class Quiz extends JPanel implements ActionListener {
 
 
 		return voices;
+		*/
 	}
 
 	//method to change the voice.
@@ -307,12 +320,6 @@ public class Quiz extends JPanel implements ActionListener {
 		output.close();
 	}
 
-	/*
-	//Method that tells u if a string contains something other than alphabet
-	private boolean onlyAlphabet(String s){
-		return s.matches("[a-zA-Z]+");
-	}
-	 */
 
 	//Method that uses festival to speak out the string passed into it
 	private void festival(String tts) throws Exception{
@@ -442,6 +449,57 @@ public class Quiz extends JPanel implements ActionListener {
 		output = new BufferedWriter(new FileWriter(failed,true)); 
 		output.append(_testList.get(_testNo-1)+"\n");
 		output.close();
+	}
+	
+	public class Settings extends JFrame {
+
+		private JPanel contentPane;
+
+		/**
+		 * Create the frame.
+		 */
+		public Settings() {
+			setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+			setBounds(100, 100, 346, 215);
+			contentPane = new JPanel();
+			contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+			setContentPane(contentPane);
+			contentPane.setLayout(null);
+			
+			JLabel lblChangeVoice = new JLabel("Change Voice");
+			lblChangeVoice.setBounds(10, 99, 85, 24);
+			contentPane.add(lblChangeVoice);
+			
+			String[] voices = _voices.toArray(new String[_voices.size()]);
+			
+			JComboBox<String> comboBox = new JComboBox<String>(voices);
+			comboBox.setBounds(118, 101, 186, 20);
+			contentPane.add(comboBox);
+			
+			JLabel lblSettings = new JLabel("Settings");
+			lblSettings.setHorizontalAlignment(SwingConstants.CENTER);
+			lblSettings.setFont(new Font("Calibri Light", Font.PLAIN, 25));
+			lblSettings.setBounds(10, 11, 310, 24);
+			contentPane.add(lblSettings);
+			
+			JLabel lblMute = new JLabel("Mute background");
+			lblMute.setBounds(10, 74, 99, 14);
+			contentPane.add(lblMute);
+			
+			JToggleButton toggleButton = new JToggleButton("");
+			toggleButton.setIcon(new ImageIcon("mute2.png"));
+			toggleButton.setBounds(118, 50, 57, 40);
+			contentPane.add(toggleButton);
+			
+			JButton btnOK = new JButton("Ok");
+			btnOK.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					dispose();
+				}
+			});
+			btnOK.setBounds(215, 132, 89, 23);
+			contentPane.add(btnOK);
+		}
 	}
 
 }
