@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -13,7 +14,7 @@ import javax.swing.SwingConstants;
 
 public class SubMenu extends JPanel {
 
-	private String _file;
+	private File _file;
 	private JPanel _menu;
 	private JFrame _main;
 	private int _level;
@@ -28,7 +29,7 @@ public class SubMenu extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public SubMenu(String file, int level, int correct, int testNum, JFrame main) {
+	public SubMenu(File file, int level, int correct, int testNum, JFrame main) {
 		
 		//Setting the size of the main menu and choosing the layout of it.
 		_file = file;
@@ -61,7 +62,7 @@ public class SubMenu extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Menu menu = new Menu(_level, _main);
+				Menu menu = new Menu(_level, _main, _file, 10);
 				_main.getContentPane().add(menu);
 				menu.setVisible(true);
 			}
@@ -76,7 +77,7 @@ public class SubMenu extends JPanel {
 				setVisible(false);
 				Quiz q = null;
 				try {
-					q = new Quiz("NZCER-spelling-lists.txt", _level, _main);
+					q = new Quiz(_file, _level, _main);
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
@@ -107,7 +108,7 @@ public class SubMenu extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				setVisible(false);
-				Menu menu = new Menu(_level + 1, _main);
+				Menu menu = new Menu(_level + 1, _main, _file, 10);
 				_main.getContentPane().add(menu);
 				menu.setVisible(true);
 			}

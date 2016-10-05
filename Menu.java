@@ -35,15 +35,19 @@ public class Menu extends JPanel {
 	JLabel lblLevel = new JLabel();
 
 	private int _level;
-
+	private File _file;
 	private JFrame _frame;
+	private int _wordNum;
 
 	/**
 	 * Create the frame.
 	 */
-	public Menu(int level, JFrame frame) {
+	public Menu(int level, JFrame frame, File file, int wordNum) {
 		_frame = frame;
 		_level = level;
+		_file = file;
+		_wordNum = wordNum;
+		
 
 
 		//Menu Panel Stuff
@@ -66,14 +70,14 @@ public class Menu extends JPanel {
 		quizBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//If no wordlist is found show error message to user
-				File f = new File("NZCER-spelling-lists.txt");
+				File f = _file;
 				if(!f.exists()){
 					JOptionPane.showMessageDialog(null, "No wordlist file is found!!\n(Please place wordlist file in the working directory)");
 					//If there is no word inside the lsit
 				}else{ 
 					WordList word = null;
 					try {
-						word = new WordList("NZCER-spelling-lists.txt");
+						word = new WordList(_file);
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -84,7 +88,7 @@ public class Menu extends JPanel {
 						//else start the quiz
 						Quiz q;
 						try {
-							q = new Quiz("NZCER-spelling-lists.txt", _level, _frame);
+							q = new Quiz(_file, _level, _frame, _wordNum);
 
 							_frame.getContentPane().add(q);
 							setVisible(false);
@@ -126,6 +130,17 @@ public class Menu extends JPanel {
 		JButton btnSettings = new JButton("Settings");
 		btnSettings.setFont(new Font("Calibri Light", Font.PLAIN, 20));
 		btnSettings.setBounds(151, 348, 170, 50);
+		btnSettings.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				MainSettings ms = new MainSettings();
+				_frame.getContentPane().add(ms);
+				setVisible(false);
+				ms.setVisible(true);
+			}
+			
+		});
 		this.add(btnSettings);
 
 		//Submenu

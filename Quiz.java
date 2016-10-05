@@ -42,7 +42,7 @@ public class Quiz extends JPanel implements ActionListener {
 	private String _voice;
 	private JComboBox<String> _selectVoices;
 	private JPanel _main;
-	private String _file;
+	private File _file;
 	private int _wc;
 	private int _testNum;
 	private int _coins = 0;
@@ -59,23 +59,23 @@ public class Quiz extends JPanel implements ActionListener {
 	private JLabel lblCorrect = new JLabel("Hello there, I will give you feedback on your test");
 	private int _correct=0;
 	private int incorrect;
-	
+
 	private JFrame _frame;
 
 
 	/**
 	 * Create the panel.
 	 */
-	public Quiz(String file,int level, JFrame frame) throws  Exception {
+	public Quiz(File file,int level, JFrame frame, int maxNum) throws  Exception {
 		_file=file;
 		_level = level;
 		_frame = frame;
-
+		_maxNum = maxNum;
 		getAccuracy();
 
 		getVoices();
 		_voice = _voices.get(0);
-		
+
 		//changeVoice("voice_akl_nz_jdt_diphone");
 		this.setBackground(new Color(255, 255, 153));
 		this.setLayout(null);
@@ -164,11 +164,9 @@ public class Quiz extends JPanel implements ActionListener {
 
 		WordList wordlist = null;
 		//Creating the wordlist using the file name
-		if(file.equals("NZCER-spelling-lists.txt")){
-			wordlist = new WordList(_file);
-			_maxNum = 10;
-		}
-		_wc = wordlist.getWordCount(level);
+		wordlist = new WordList(_file);
+
+		_wc = wordlist.getWordCount(_level);
 
 		//Choosing the number of quiz depending on the word count
 		String tts = "";
@@ -184,7 +182,7 @@ public class Quiz extends JPanel implements ActionListener {
 		btnListenAgain.addActionListener(this);
 		btnSubmit.addActionListener(this);
 		btnStatistics.addActionListener(this);
-		
+
 		_frame.getRootPane().setDefaultButton(btnSubmit);
 		//Word to be tested
 		setTestList(wordlist);
@@ -195,7 +193,7 @@ public class Quiz extends JPanel implements ActionListener {
 		//Getting the word that user wrote
 		String word = textField.getText();
 
-	
+
 		try{
 			//If user pressed speak button,  the word
 			//is spoken by festival.
@@ -221,9 +219,9 @@ public class Quiz extends JPanel implements ActionListener {
 				_attempts++;
 				_testNo++;
 				_correct++;
-				
+
 				_streak++;
-				
+
 				if (_streak >5) {
 					_coins+=50;
 				} else if (_streak > 2) {
@@ -259,7 +257,7 @@ public class Quiz extends JPanel implements ActionListener {
 					//increase test number and fail value
 					_attempts++;
 					_fails++;
-					
+
 					_streak = 0;
 					//Adding failed word to the failed list.
 					failed();
@@ -307,7 +305,7 @@ public class Quiz extends JPanel implements ActionListener {
 
 		Festival f = new Festival("","");
 		_voices = f.listOfVoices();
-		
+
 	}
 
 	//method to change the voice.
@@ -455,7 +453,7 @@ public class Quiz extends JPanel implements ActionListener {
 		output.append(_testList.get(_testNo-1)+"\n");
 		output.close();
 	}
-	
+
 	private void makeTable() {
 		ViewAccuracy va = new ViewAccuracy();
 		JTable table = new JTable(va);
@@ -474,12 +472,12 @@ public class Quiz extends JPanel implements ActionListener {
 			public void actionPerformed(ActionEvent e) {
 				fr.dispose();
 			}
-			
+
 		});
 		statsPanel.add(returnBtn, BorderLayout.SOUTH);
 		fr.add(statsPanel);
 	}
-	
+
 	public class Settings extends JFrame {
 
 		private JPanel contentPane;
@@ -494,32 +492,32 @@ public class Quiz extends JPanel implements ActionListener {
 			contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 			setContentPane(contentPane);
 			contentPane.setLayout(null);
-			
+
 			JLabel lblChangeVoice = new JLabel("Change Voice");
 			lblChangeVoice.setBounds(10, 99, 85, 24);
 			contentPane.add(lblChangeVoice);
-			
+
 			String[] voices = _voices.toArray(new String[_voices.size()]);
-			
+
 			final JComboBox<String> comboBox = new JComboBox<String>(voices);
 			comboBox.setBounds(118, 101, 186, 20);
 			contentPane.add(comboBox);
-			
+
 			JLabel lblSettings = new JLabel("Settings");
 			lblSettings.setHorizontalAlignment(SwingConstants.CENTER);
 			lblSettings.setFont(new Font("Calibri Light", Font.PLAIN, 25));
 			lblSettings.setBounds(10, 11, 310, 24);
 			contentPane.add(lblSettings);
-			
+
 			JLabel lblMute = new JLabel("Mute background");
 			lblMute.setBounds(10, 74, 99, 14);
 			contentPane.add(lblMute);
-			
+
 			JToggleButton toggleButton = new JToggleButton("");
 			toggleButton.setIcon(new ImageIcon("mute2.png"));
 			toggleButton.setBounds(118, 50, 57, 40);
 			contentPane.add(toggleButton);
-			
+
 			JButton btnOK = new JButton("Ok");
 			btnOK.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {

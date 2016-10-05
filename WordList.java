@@ -19,9 +19,9 @@ public class WordList {
 	private boolean _failed = false;
 	
 	//This constructor is for normal quiz.
-	public WordList(String file) throws IOException{
+	public WordList(File file) throws IOException{
 		
-			BufferedReader wordlist = new BufferedReader(new FileReader("."+File.separator+file));
+			BufferedReader wordlist = new BufferedReader(new FileReader(file));
 			
 			String line;
 			int a=0;
