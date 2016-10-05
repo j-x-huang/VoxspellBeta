@@ -130,52 +130,6 @@ public class Menu extends JPanel {
 
 		//Submenu
 		/*
-		JPanel panel_1 = new JPanel();
-		panel_1.setBackground(new Color(255, 255, 102));
-		//contentPane.add(panel_1, "name_95639934584776");
-		panel_1.setLayout(null);
-
-		JLabel lblQuizFinished = new JLabel("Quiz Finished");
-		lblQuizFinished.setFont(new Font("Calibri Light", Font.PLAIN, 26));
-		lblQuizFinished.setHorizontalAlignment(SwingConstants.CENTER);
-		lblQuizFinished.setBounds(10, 73, 454, 45);
-		panel_1.add(lblQuizFinished);
-
-		JLabel lblNewLabel = new JLabel("You scored: 10/10");
-		lblNewLabel.setFont(new Font("Calibri Light", Font.PLAIN, 16));
-		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel.setBounds(10, 120, 454, 28);
-		panel_1.add(lblNewLabel);
-
-		JLabel lblWellDone = new JLabel("Well Done! You can progress the the next level.");
-		lblWellDone.setHorizontalAlignment(SwingConstants.CENTER);
-		lblWellDone.setFont(new Font("Calibri Light", Font.PLAIN, 16));
-		lblWellDone.setBounds(20, 141, 444, 28);
-		panel_1.add(lblWellDone);
-
-		JButton btnReturnToMenu = new JButton("Return to Menu");
-		btnReturnToMenu.setBounds(170, 232, 135, 35);
-		panel_1.add(btnReturnToMenu);
-
-		JButton btnRepeatQuiz = new JButton("Repeat Quiz");
-		btnRepeatQuiz.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-			}
-		});
-		btnRepeatQuiz.setBounds(170, 278, 135, 35);
-		panel_1.add(btnRepeatQuiz);
-
-		JButton btnViewStatistics = new JButton("View Statistics");
-		btnViewStatistics.setBounds(170, 324, 135, 35);
-		panel_1.add(btnViewStatistics);
-
-		JButton btnWatchVideo = new JButton("Watch Video");
-		btnWatchVideo.setBounds(170, 370, 135, 35);
-		panel_1.add(btnWatchVideo);
-
-		JButton btnAdvance = new JButton("Advance ");
-		btnAdvance.setBounds(170, 190, 135, 35);
-		panel_1.add(btnAdvance);
 
 		JPanel panel_2 = new JPanel();
 		panel_2.setBackground(new Color(255, 255, 102));

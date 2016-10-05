@@ -14,7 +14,7 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.JButton;
 
-public class MainSettings extends JFrame {
+public class MainSettings extends JPanel {
 
 	private JPanel contentPane;
 

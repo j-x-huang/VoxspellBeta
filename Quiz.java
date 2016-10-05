@@ -1,5 +1,6 @@
 package beta;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -20,10 +21,14 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+
+import beta.ViewAccuracy;
 
 public class Quiz extends JPanel implements ActionListener {
 	private JTextField textField;
@@ -40,16 +45,18 @@ public class Quiz extends JPanel implements ActionListener {
 	private String _file;
 	private int _wc;
 	private int _testNum;
+	private int _coins = 0;
+	private int _streak = 0;
 
 	private JButton btnListenAgain = new JButton("Listen Again");
 	private JButton btnSubmit = new JButton("Submit");
 	private JButton btnStatistics = new JButton("Statistics");
 	private JButton btnSettings = new JButton("");
 
-	private JLabel lblCoin = new JLabel("Coins: 20");
+	private JLabel lblCoin = new JLabel("Coins: 0");
 	private JLabel lblPleaseSpellWord = new JLabel("Please spell word 1 of 3:");
 	private JLabel lblAcc = new JLabel("Accuracy: 0/10");
-	private JLabel lblCorrect = new JLabel("Correct");
+	private JLabel lblCorrect = new JLabel("Hello there, I will give you feedback on your test");
 	private int _correct=0;
 	private int incorrect;
 	
@@ -122,7 +129,7 @@ public class Quiz extends JPanel implements ActionListener {
 
 		lblCoin.setFont(new Font("Calibri", Font.PLAIN, 15));
 		lblCoin.setIcon(new ImageIcon("Coin1.png"));
-		lblCoin.setBounds(334, 309, 99, 37);
+		lblCoin.setBounds(334, 309, 140, 37);
 		this.add(lblCoin);
 
 		JLabel beelbl = new JLabel("");
@@ -177,7 +184,8 @@ public class Quiz extends JPanel implements ActionListener {
 		btnListenAgain.addActionListener(this);
 		btnSubmit.addActionListener(this);
 		btnStatistics.addActionListener(this);
-
+		
+		_frame.getRootPane().setDefaultButton(btnSubmit);
 		//Word to be tested
 		setTestList(wordlist);
 		festival(_testList.get(_testNo-1));
@@ -187,11 +195,7 @@ public class Quiz extends JPanel implements ActionListener {
 		//Getting the word that user wrote
 		String word = textField.getText();
 
-		if(e.getSource().equals(_selectVoices)){
-			String data = (String) _selectVoices.getItemAt(_selectVoices.getSelectedIndex());
-			_voice = data;
-			return;
-		}
+	
 		try{
 			//If user pressed speak button,  the word
 			//is spoken by festival.
@@ -202,7 +206,7 @@ public class Quiz extends JPanel implements ActionListener {
 				return;
 				//if spelling is pressed, the alphabet of the word being tested  is spoken
 			}else if (button.equals(btnStatistics)){
-				//_main.makeTable();
+				makeTable();
 				return;
 			}
 			//If user is correct
@@ -217,6 +221,17 @@ public class Quiz extends JPanel implements ActionListener {
 				_attempts++;
 				_testNo++;
 				_correct++;
+				
+				_streak++;
+				
+				if (_streak >5) {
+					_coins+=50;
+				} else if (_streak > 2) {
+					_coins+=20;
+				} else {
+					_coins+=10;
+				}
+				lblCoin.setText("Coins: "+ _coins);
 
 				//Setting the new label
 				lblPleaseSpellWord.setText("Spell word "+(_testNo)+" of "+_maxNum+": ");
@@ -244,7 +259,8 @@ public class Quiz extends JPanel implements ActionListener {
 					//increase test number and fail value
 					_attempts++;
 					_fails++;
-
+					
+					_streak = 0;
 					//Adding failed word to the failed list.
 					failed();
 					failedTotal();
@@ -292,17 +308,6 @@ public class Quiz extends JPanel implements ActionListener {
 		Festival f = new Festival("","");
 		_voices = f.listOfVoices();
 		
-		
-		/*
-		String[] str = new String[_voices.size()];
-		for(int i = 0;i<_voices.size();i++)str[i]=_voices.get(i);
-
-
-		JComboBox<String> voices = new JComboBox<String>(str);
-
-
-		return voices;
-		*/
 	}
 
 	//method to change the voice.
@@ -451,6 +456,30 @@ public class Quiz extends JPanel implements ActionListener {
 		output.close();
 	}
 	
+	private void makeTable() {
+		ViewAccuracy va = new ViewAccuracy();
+		JTable table = new JTable(va);
+		final JFrame fr = new JFrame();
+		fr.setSize(500,500);
+		fr.setVisible(true);
+		//Create panels for Statistics. Add table to panel.
+		JPanel statsPanel = new JPanel();
+		JButton returnBtn = new JButton("Close Stats");
+		statsPanel.setLayout(new BorderLayout());
+		//statsPanel.add(_statLabel, BorderLayout.NORTH);
+		statsPanel.add(new JScrollPane(table), BorderLayout.CENTER);
+		returnBtn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				fr.dispose();
+			}
+			
+		});
+		statsPanel.add(returnBtn, BorderLayout.SOUTH);
+		fr.add(statsPanel);
+	}
+	
 	public class Settings extends JFrame {
 
 		private JPanel contentPane;
@@ -472,7 +501,7 @@ public class Quiz extends JPanel implements ActionListener {
 			
 			String[] voices = _voices.toArray(new String[_voices.size()]);
 			
-			JComboBox<String> comboBox = new JComboBox<String>(voices);
+			final JComboBox<String> comboBox = new JComboBox<String>(voices);
 			comboBox.setBounds(118, 101, 186, 20);
 			contentPane.add(comboBox);
 			
@@ -494,6 +523,8 @@ public class Quiz extends JPanel implements ActionListener {
 			JButton btnOK = new JButton("Ok");
 			btnOK.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					String data = (String) comboBox.getItemAt(comboBox.getSelectedIndex());
+					_voice = data;
 					dispose();
 				}
 			});
