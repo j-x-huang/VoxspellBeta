@@ -47,13 +47,21 @@ public class SubMenu extends JPanel {
 		lblQuizFinished.setBounds(10, 72, 454, 45);
 		this.add(lblQuizFinished);
 		
-		JLabel lblNewLabel = new JLabel("You scored: 10/10");
+		JLabel lblNewLabel = new JLabel("You scored: " + correct + "/" + maxNum);
 		lblNewLabel.setFont(new Font("Calibri Light", Font.PLAIN, 16));
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setBounds(10, 120, 454, 28);
 		this.add(lblNewLabel);
 		
-		JLabel lblWellDone = new JLabel("Well Done! You can progress the the next level.");
+		double percentage = ((double) correct * 100 )/ (double) maxNum;
+		
+		JLabel lblWellDone = new JLabel();
+		if (percentage >= 90) {
+			lblWellDone.setText("Well Done! You can progress the the next level.");
+		} else {
+			lblWellDone.setText("Good effort! Please retry quiz in order to progress");
+		}
+		
 		lblWellDone.setHorizontalAlignment(SwingConstants.CENTER);
 		lblWellDone.setFont(new Font("Calibri Light", Font.PLAIN, 16));
 		lblWellDone.setBounds(20, 141, 444, 28);

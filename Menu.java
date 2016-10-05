@@ -106,7 +106,6 @@ public class Menu extends JPanel {
 		statsBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				makeTable();
-				System.out.println("clicked");
 			}
 		});
 		statsBtn.setFont(new Font("Calibri Light", Font.PLAIN, 20));
@@ -129,7 +128,7 @@ public class Menu extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				MainSettings ms = new MainSettings(_frame, _file);
+				MainSettings ms = new MainSettings(_frame, _file, _wordNum);
 				_frame.getContentPane().add(ms);
 				setVisible(false);
 				ms.setVisible(true);

@@ -57,6 +57,7 @@ public class Quiz extends JPanel implements ActionListener {
 	private JLabel lblPleaseSpellWord = new JLabel("Please spell word 1 of 3:");
 	private JLabel lblAcc = new JLabel("Accuracy: 0/10");
 	private JLabel lblCorrect = new JLabel("Hello there, I will give you feedback on your test");
+	private JLabel lblStreak = new JLabel();
 	private int _correct=0;
 	private int incorrect;
 
@@ -131,6 +132,10 @@ public class Quiz extends JPanel implements ActionListener {
 		lblCoin.setIcon(new ImageIcon("Coin1.png"));
 		lblCoin.setBounds(334, 309, 140, 37);
 		this.add(lblCoin);
+		
+		lblStreak.setFont(new Font("Calibri", Font.PLAIN, 15));
+		lblStreak.setBounds(300, 309, 70, 37);
+		this.add(lblStreak);
 
 		JLabel beelbl = new JLabel("");
 		beelbl.setIcon(new ImageIcon("bee_h.png"));
@@ -224,11 +229,15 @@ public class Quiz extends JPanel implements ActionListener {
 
 				if (_streak >5) {
 					_coins+=50;
+					lblStreak.setText("+50");
 				} else if (_streak > 2) {
 					_coins+=20;
+					lblStreak.setText("+20");
 				} else {
 					_coins+=10;
+					lblStreak.setText("+10");
 				}
+
 				lblCoin.setText("Coins: "+ _coins);
 
 				//Setting the new label
