@@ -22,14 +22,22 @@ import javax.swing.JFileChooser;
 public class MainSettings extends JPanel {
 
 	private JPanel contentPane;
-	private JLabel label_4 = new JLabel("wordList");
+	private JLabel label_4 = new JLabel();
 	private File _file;
+	private JSpinner spinner = new JSpinner();
+	private JFrame _frame;
+
 
 
 	/**
 	 * Create the frame.
 	 */
-	public MainSettings() {
+	public MainSettings(JFrame frame, File file) {
+		_frame = frame;
+		_file = file;
+		
+		label_4.setText(file.getName());
+		
 		this.setLayout(null);
 		JLabel label = new JLabel("Settings");
 		label.setHorizontalAlignment(SwingConstants.CENTER);
@@ -51,10 +59,10 @@ public class MainSettings extends JPanel {
 		label_2.setBounds(59, 156, 159, 14);
 		this.add(label_2);
 
-		JSpinner spinner = new JSpinner();
 		spinner.setModel(new SpinnerNumberModel(10, 5, 20, 1));
 		spinner.setBounds(245, 153, 57, 20);
 		this.add(spinner);
+		
 
 		JLabel label_3 = new JLabel("Current spelling list:");
 		label_3.setFont(new Font("Calibri", Font.PLAIN, 15));
@@ -63,7 +71,7 @@ public class MainSettings extends JPanel {
 
 		label_4.setFont(new Font("Calibri", Font.PLAIN, 15));
 		label_4.setBounds(245, 213, 112, 14);
-		//-----
+		//---------------------------------------------------
 		final JFileChooser fc = new JFileChooser();
 		
 		JButton button = new JButton("Select Spelling List");
@@ -86,6 +94,21 @@ public class MainSettings extends JPanel {
 
 		JButton button_1 = new JButton("Ok");
 		button_1.setBounds(375, 417, 89, 23);
+		button_1.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				File file = _file;
+				int spinnerVal = (int) spinner.getValue();
+				
+				Menu menu = new Menu(1, _frame, file, spinnerVal);
+				_frame.getContentPane().add(menu);
+				setVisible(false);
+				menu.setVisible(true);
+				
+			}
+			
+		});
 		this.add(button_1);
 
 		JButton button_2 = new JButton("Cancel");

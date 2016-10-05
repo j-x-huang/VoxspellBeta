@@ -24,17 +24,19 @@ public class SubMenu extends JPanel {
 	private JButton btnViewStatistics = new JButton("View Statistics");
 	private JButton btnWatchVideo = new JButton("Watch Video");
 	private JButton btnAdvance = new JButton("Advance ");
+	private int _maxNum;
 
 
 	/**
 	 * Create the panel.
 	 */
-	public SubMenu(File file, int level, int correct, int testNum, JFrame main) {
+	public SubMenu(File file, int level, int correct, int testNum, JFrame main, int maxNum) {
 		
 		//Setting the size of the main menu and choosing the layout of it.
 		_file = file;
 		_main = main;
 		_level = level;
+		_maxNum = maxNum;
 		
 		this.setBackground(new Color(255, 255, 102));
 		this.setLayout(null);
@@ -77,7 +79,7 @@ public class SubMenu extends JPanel {
 				setVisible(false);
 				Quiz q = null;
 				try {
-					q = new Quiz(_file, _level, _main);
+					q = new Quiz(_file, _level, _main, _maxNum);
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}

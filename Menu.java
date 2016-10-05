@@ -22,12 +22,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.awt.event.ActionEvent;
-import java.awt.CardLayout;
-import javax.swing.JTextField;
-import javax.swing.ImageIcon;
-import javax.swing.JToggleButton;
-import javax.swing.JSpinner;
-import javax.swing.SpinnerNumberModel;
+
 
 public class Menu extends JPanel {
 
@@ -134,7 +129,7 @@ public class Menu extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				MainSettings ms = new MainSettings();
+				MainSettings ms = new MainSettings(_frame, _file);
 				_frame.getContentPane().add(ms);
 				setVisible(false);
 				ms.setVisible(true);
@@ -143,61 +138,6 @@ public class Menu extends JPanel {
 		});
 		this.add(btnSettings);
 
-		//Submenu
-		/*
-
-		JPanel panel_2 = new JPanel();
-		panel_2.setBackground(new Color(255, 255, 102));
-		contentPane.add(panel_2, "name_283079081559301");
-		panel_2.setLayout(null);
-
-		JLabel label = new JLabel("Settings");
-		label.setHorizontalAlignment(SwingConstants.CENTER);
-		label.setFont(new Font("Calibri Light", Font.PLAIN, 25));
-		label.setBounds(10, 11, 454, 24);
-		panel_2.add(label);
-
-		JLabel label_1 = new JLabel("Mute background");
-		label_1.setFont(new Font("Calibri", Font.PLAIN, 15));
-		label_1.setBounds(59, 84, 130, 24);
-		panel_2.add(label_1);
-
-		JToggleButton toggleButton = new JToggleButton("");
-		toggleButton.setBounds(245, 68, 57, 40);
-		panel_2.add(toggleButton);
-
-		JLabel label_2 = new JLabel("Number of words tested");
-		label_2.setFont(new Font("Calibri", Font.PLAIN, 15));
-		label_2.setBounds(59, 156, 159, 14);
-		panel_2.add(label_2);
-
-		JSpinner spinner = new JSpinner();
-		spinner.setModel(new SpinnerNumberModel(10, 5, 20, 1));
-		spinner.setBounds(245, 153, 57, 20);
-		panel_2.add(spinner);
-
-		JLabel label_3 = new JLabel("Current spelling list:");
-		label_3.setFont(new Font("Calibri", Font.PLAIN, 15));
-		label_3.setBounds(59, 213, 130, 14);
-		panel_2.add(label_3);
-
-		JLabel label_4 = new JLabel("wordList");
-		label_4.setFont(new Font("Calibri", Font.PLAIN, 15));
-		label_4.setBounds(245, 213, 112, 14);
-		panel_2.add(label_4);
-
-		JButton button = new JButton("Select Spelling List");
-		button.setBounds(245, 250, 119, 23);
-		panel_2.add(button);
-
-		JButton button_1 = new JButton("Ok");
-		button_1.setBounds(375, 417, 89, 23);
-		panel_2.add(button_1);
-
-		JButton button_2 = new JButton("Cancel");
-		button_2.setBounds(268, 417, 89, 23);
-		panel_2.add(button_2);
-		*/
 
 	}
 

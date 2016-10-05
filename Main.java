@@ -29,7 +29,7 @@ public class Main extends JFrame{
 		createAccuracy();
 		levelSelect();
 		
-		File file = new File("/afs/ec.auckland.ac.nz/users/x/h/xhua451/unixhome/workspace/VoxspellBeta/NZCER-spelling-lists.txt");
+		File file = new File("NZCER-spelling-lists.txt");
 		
 		Menu menu = new Menu(_level, this, file, 10);
 		contentPane.add(menu);

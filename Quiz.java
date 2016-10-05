@@ -286,7 +286,7 @@ public class Quiz extends JPanel implements ActionListener {
 				lblCorrect.setText(lblCorrect.getText()+" Quiz Finished!!");
 				festival(lblCorrect.getText());
 				//opens options menu where user can choose their next action.
-				SubMenu sub = new SubMenu(_file,_level,_correct,_testNo-1, _frame );
+				SubMenu sub = new SubMenu(_file,_level,_correct,_testNo-1, _frame , _maxNum);
 				_frame.getContentPane().add(sub);
 				this.setVisible(false);
 				sub.setVisible(true);
