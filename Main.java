@@ -78,16 +78,17 @@ public class Main extends JFrame{
 		String[] levelStrings = { "1", "2", "3", "4", "5", "6", "7", "8", 
 				"9", "10", "11" };
 		final JComboBox<String> combo = new JComboBox<>(levelStrings);
-		String[] options = { "OK" };
 
-
+		
 		String num = (String) JOptionPane.showInputDialog(this, "Please select a level", "Level Select", 
 				JOptionPane.PLAIN_MESSAGE, null, levelStrings, levelStrings[0]);
+		
+		
 		if(num==null){
 			this.dispose();
 		}else{
 		_level = Integer.parseInt(num);
 		this.setVisible(true);
-		}
+		} 
 	}
 }

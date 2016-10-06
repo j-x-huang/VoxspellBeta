@@ -128,7 +128,7 @@ public class Menu extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				MainSettings ms = new MainSettings(_frame, _file, _wordNum);
+				MainSettings ms = new MainSettings(_frame, _file, _wordNum, _level);
 				_frame.getContentPane().add(ms);
 				setVisible(false);
 				ms.setVisible(true);

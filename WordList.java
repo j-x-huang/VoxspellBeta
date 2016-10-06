@@ -17,7 +17,7 @@ public class WordList {
 	private ArrayList<String> _wordList=new ArrayList<String>();
 	
 	private HashMap<Integer, ArrayList<String>> _levelMap = new HashMap<Integer, ArrayList<String>>();
-	private ArrayList<Integer> _levelArray = new ArrayList<Integer>();
+	private ArrayList<String> _levelArray = new ArrayList<String>();
 	
 	private int[] pos = new int[11];
 	private int _level;
@@ -45,7 +45,7 @@ public class WordList {
 							ArrayList<String> tempList = new ArrayList<String>();
 							tempList.add(line);
 							_levelMap.put(_level, tempList);
-							_levelArray.add(_level);
+							_levelArray.add(_level + "");
 						}
 					}
 				}
@@ -124,6 +124,12 @@ public class WordList {
 		ArrayList<String> testList = new ArrayList<String>();
 		testList.addAll(list);
 		return testList;
+	}
+	
+	public String[] getLevels() {
+		String[] array = _levelArray.toArray(new String[_levelArray.size()]);
+		return array;
+		
 	}
 	
 }

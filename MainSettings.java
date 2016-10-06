@@ -13,12 +13,14 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
 
 import javax.swing.SwingConstants;
 import javax.swing.JToggleButton;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 
 public class MainSettings extends JPanel {
@@ -30,17 +32,20 @@ public class MainSettings extends JPanel {
 	private int _maxNum;
 	private JSpinner spinner = new JSpinner();
 	private JFrame _frame;
+	private WordList _wl;
+	private int _level;
 
 
 
 	/**
 	 * Create the frame.
 	 */
-	public MainSettings(JFrame frame, File file, int maxNum) {
+	public MainSettings(JFrame frame, File file, int maxNum, int level) {
 		_frame = frame;
 		_file = file;
 		_oldFile = file;
 		_maxNum = maxNum;
+		_level = level;
 
 
 		label_4.setText(file.getName());
@@ -111,11 +116,20 @@ public class MainSettings extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				File file = _file;
 				int spinnerVal = (int) spinner.getValue();
+				int level = 0;
+				try {
+					_wl = new WordList(file);
+					level = levelSelect();
 
-				Menu menu = new Menu(1, _frame, file, spinnerVal);
-				_frame.getContentPane().add(menu);
-				setVisible(false);
-				menu.setVisible(true);
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+				if (level != 0) {
+					Menu menu = new Menu(level, _frame, file, spinnerVal);
+					_frame.getContentPane().add(menu);
+					setVisible(false);
+					menu.setVisible(true);
+				}
 
 			}
 
@@ -128,7 +142,7 @@ public class MainSettings extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Menu menu = new Menu(1, _frame, _oldFile, _maxNum);
+				Menu menu = new Menu(_level, _frame, _oldFile, _maxNum);
 				_frame.getContentPane().add(menu);
 				setVisible(false);
 				menu.setVisible(true);
@@ -136,4 +150,22 @@ public class MainSettings extends JPanel {
 		});
 		this.add(button_2);
 	}
+
+
+	private int levelSelect() {
+
+		String[] levelStrings = _wl.getLevels();
+
+		String num = (String) JOptionPane.showInputDialog(this, "Please select a level", "Level Select", 
+				JOptionPane.PLAIN_MESSAGE, null, levelStrings, levelStrings[0]);
+
+
+		if(num==null){
+			return 0;
+		}else{
+			return Integer.parseInt(num);
+		} 
+	}
+
+
 }
