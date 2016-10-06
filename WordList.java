@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Random;
 
@@ -15,7 +16,11 @@ public class WordList {
 	
 	private ArrayList<String> _wordList=new ArrayList<String>();
 	
+	private HashMap<Integer, ArrayList<String>> _levelMap = new HashMap<Integer, ArrayList<String>>();
+	private ArrayList<Integer> _levelArray = new ArrayList<Integer>();
+	
 	private int[] pos = new int[11];
+	private int _level;
 	private boolean _failed = false;
 	
 	//This constructor is for normal quiz.
@@ -28,14 +33,20 @@ public class WordList {
 			//Reading word where and adding it to arrayList if it is not an empty line
 			while ((line = wordlist.readLine()) != null){
 				if(!"".equals(line.trim())){
-					_wordList.add(line);
 					String[] lines = line.split(" ");
 					if(lines[0].equals("%Level")){
-						if(_wordList.size()<1)
-							pos[a] = 0;
-						else
-							pos[a] = _wordList.size()-1;
-						a++;
+						_level = Integer.parseInt(lines[1]);
+					} else if (line.equals("0")){
+						break;
+					} else {
+						if (_levelMap.containsKey(_level)) {
+							_levelMap.get(_level).add(line);
+						} else {
+							ArrayList<String> tempList = new ArrayList<String>();
+							tempList.add(line);
+							_levelMap.put(_level, tempList);
+							_levelArray.add(_level);
+						}
 					}
 				}
 			}
@@ -44,6 +55,7 @@ public class WordList {
 	/*
 	 * This constructor is for making wordlist for review function.
 	 */
+	/*
 	public WordList(String file, int level) throws IOException{
 		
 		BufferedReader wordlist = new BufferedReader(new FileReader("."+File.separator+file+level));
@@ -58,9 +70,13 @@ public class WordList {
 		}
 		_failed = true;
 }
+*/
 	
 	//Return wordCount for each level.
 	public int getWordCount(int level){
+		return _levelMap.get(level).size();
+		
+		/*
 		if(_failed){
 			LinkedHashSet<String> temp = new LinkedHashSet<String>(_wordList);
 			return temp.size();
@@ -69,39 +85,39 @@ public class WordList {
 			return _wordList.size() -1 - pos[level-1];
 		} 
 		return pos[level]-1-pos[level-1];
+		*/
 		
 	}
 	
 	//Get random word from the arrayList
 	public String getRandomWord(int level){
-		Random r = new Random();
-		LinkedHashSet<String> temp = new LinkedHashSet<String>(_wordList);
-		ArrayList<String> testList = new ArrayList<String>();
-		testList.addAll(temp);
+		Random random = new Random();
 		//Getting random position
-		
+		/*
 		if(_failed){
 			int rand = Math.abs(r.nextInt()) % testList.size();
 			return testList.get(rand);
-		}
-		int rand = Math.abs(r.nextInt()) % this.getWordCount(level);
-		return _wordList.get(rand+pos[level-1]+1);
+		} */
+		int rand = Math.abs(random.nextInt()) % this.getWordCount(level);
+		return _levelMap.get(level).get(rand);
 	}
 	
 	//Sort the list and return the word at the position specified.
+	/*
 	public String getSortedWord(int a){
 		Collections.sort(_wordList);
 		return _wordList.get(a);
 	}
+	*/
 	
 	//Create a list of words to be tested.
-	public ArrayList<String> createTestList(int level, int num){
+	public ArrayList<String> createTestList(int level, int maxWords){
 		//Store only unique values.
 		LinkedHashSet<String> list = new LinkedHashSet<String>();
-		int n = getWordCount(level);
-		while(list.size()<num||list.size()<n){
+		int wordCount = getWordCount(level);
+		while(list.size()<maxWords||list.size()<wordCount){
 			list.add(getRandomWord(level));
-			if(list.size()==n)
+			if(list.size()==wordCount)
 				break;
 		}
 		
