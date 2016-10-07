@@ -14,6 +14,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 
 import javax.swing.SwingConstants;
 import javax.swing.JToggleButton;
@@ -34,19 +35,19 @@ public class MainSettings extends JPanel {
 	private JFrame _frame;
 	private WordList _wl;
 	private int _level;
-
+	private Menu _oldMenu;
 
 
 	/**
 	 * Create the frame.
 	 */
-	public MainSettings(JFrame frame, File file, int maxNum, int level) {
+	public MainSettings(JFrame frame, File file, int maxNum, int level, Menu menu) {
 		_frame = frame;
 		_file = file;
 		_oldFile = file;
 		_maxNum = maxNum;
 		_level = level;
-
+		_oldMenu = menu;
 
 		label_4.setText(file.getName());
 
@@ -125,6 +126,12 @@ public class MainSettings extends JPanel {
 					e1.printStackTrace();
 				}
 				if (level != 0) {
+					try {
+						_oldMenu.clearStats();
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 					Menu menu = new Menu(level, _frame, file, spinnerVal);
 					_frame.getContentPane().add(menu);
 					setVisible(false);
@@ -153,8 +160,10 @@ public class MainSettings extends JPanel {
 
 
 	private int levelSelect() {
-
-		String[] levelStrings = _wl.getLevels();
+		
+		
+		int[] levels = _wl.getLevels();
+		String[] levelStrings=Arrays.toString(levels).split("[\\[\\]]")[1].split(", "); 
 
 		String num = (String) JOptionPane.showInputDialog(this, "Please select a level", "Level Select", 
 				JOptionPane.PLAIN_MESSAGE, null, levelStrings, levelStrings[0]);

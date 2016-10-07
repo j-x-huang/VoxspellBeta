@@ -1,15 +1,19 @@
 package beta;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.SwingConstants;
 
 public class SubMenu extends JPanel {
@@ -72,7 +76,7 @@ public class SubMenu extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Menu menu = new Menu(_level, _main, _file, 10);
+				Menu menu = new Menu(_level, _main, _file, _maxNum);
 				_main.getContentPane().add(menu);
 				menu.setVisible(true);
 			}
@@ -102,7 +106,7 @@ public class SubMenu extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
+				makeTable();
 				
 			}
 			
@@ -126,8 +130,16 @@ public class SubMenu extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				WordList wl= null;
+				try {
+					wl = new WordList(_file);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				int nextLevel = wl.getNextLevel(_level);
 				setVisible(false);
-				Menu menu = new Menu(_level + 1, _main, _file, 10);
+				Menu menu = new Menu(nextLevel, _main, _file, _maxNum);
 				_main.getContentPane().add(menu);
 				menu.setVisible(true);
 			}
@@ -136,28 +148,28 @@ public class SubMenu extends JPanel {
 		this.add(btnAdvance);
 	}
 	
-	public void actionPerformed(ActionEvent e) {
-		//Finding the button where the action event occured i.e. finding 
-		//the button that is clicked
-		try{
-		JButton button = (JButton) e.getSource();
-		if (button.equals(btnReturnToMenu)){  
-			setVisible(false);
-			_main.setVisible(true);
-		}else if(button.equals(btnRepeatQuiz)){
+	private void makeTable() {
+		ViewAccuracy va = new ViewAccuracy(_file);
+		JTable table = new JTable(va);
+		final JFrame fr = new JFrame();
+		fr.setSize(500,500);
+		fr.setVisible(true);
+		//Create panels for Statistics. Add table to panel.
+		JPanel statsPanel = new JPanel();
+		JButton returnBtn = new JButton("Close Stats");
+		statsPanel.setLayout(new BorderLayout());
+		//statsPanel.add(_statLabel, BorderLayout.NORTH);
+		statsPanel.add(new JScrollPane(table), BorderLayout.CENTER);
+		returnBtn.addActionListener(new ActionListener() {
 
-		}else if(button.equals(btnViewStatistics)){
-			//_main.makeTable();
-			
-		}else if(button.equals(btnAdvance)){
-			
-		}else if(button.equals(btnWatchVideo)){
-			MediaPlayer player = new MediaPlayer();
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				fr.dispose();
+			}
 
-		}
-		}catch(Exception e2){
-			e2.printStackTrace();
-		}
+		});
+		statsPanel.add(returnBtn, BorderLayout.SOUTH);
+		fr.add(statsPanel);
 	}
 
 }

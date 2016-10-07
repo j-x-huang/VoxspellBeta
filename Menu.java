@@ -128,7 +128,7 @@ public class Menu extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				MainSettings ms = new MainSettings(_frame, _file, _wordNum, _level);
+				MainSettings ms = new MainSettings(_frame, _file, _wordNum, _level, Menu.this);
 				_frame.getContentPane().add(ms);
 				setVisible(false);
 				ms.setVisible(true);
@@ -148,7 +148,7 @@ public class Menu extends JPanel {
 	}
 
 	protected void makeTable() {
-		ViewAccuracy va = new ViewAccuracy();
+		ViewAccuracy va = new ViewAccuracy(_file);
 		JTable table = new JTable(va);
 		final JPanel statsPanel = new JPanel();
 		//Add a close button to close the frame
@@ -175,13 +175,12 @@ public class Menu extends JPanel {
 
 	//This method clears the stats by overwriting existing files that
 	//stores information.
-	private void clearStats() throws IOException{
+	protected void clearStats() throws IOException{
 
 		for (int i = 1; i <= 11; i++) {
 			File accuracy = new File(".accuracy_" + i);
 			accuracy.delete();
 		}
-		createAccuracy();
 	}
 
 	//Creates save files to store the accuracy, then add zeros to the file. There is a save 

@@ -502,7 +502,7 @@ private void failedTotal() throws IOException{
 }
 
 private void makeTable() {
-	ViewAccuracy va = new ViewAccuracy();
+	ViewAccuracy va = new ViewAccuracy(_file);
 	JTable table = new JTable(va);
 	final JFrame fr = new JFrame();
 	fr.setSize(500,500);
