@@ -2,10 +2,13 @@ package beta;
 
 import java.awt.CardLayout;
 import java.awt.EventQueue;
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Arrays;
 
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -16,6 +19,8 @@ import javax.swing.border.EmptyBorder;
 public class Main extends JFrame{
 	private JPanel contentPane;
 	private int _level;
+	private File _mainFile;
+	private WordList _wl;
 
 	public Main() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -26,11 +31,20 @@ public class Main extends JFrame{
 		setContentPane(contentPane);
 		contentPane.setLayout(new CardLayout(0, 0));
 		
-		levelSelect();
+		try {
+		File file = new File(".defaultList.txt");
+		FileReader fr = new FileReader(file);
+		BufferedReader br = new BufferedReader(fr);
+		String str;
+		str = br.readLine();
+		_mainFile = new File(str);
+		_wl = new WordList(_mainFile);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		_level = levelSelect();
 		
-		File file = new File("NZCER-spelling-lists.txt");
-		
-		Menu menu = new Menu(_level, this, file, 10);
+		Menu menu = new Menu(_level, this, _mainFile, 10);
 		contentPane.add(menu);
 		menu.setVisible(true);
 	}
@@ -50,21 +64,18 @@ public class Main extends JFrame{
 	
 
 	
-	private void levelSelect() {
-		String[] levelStrings = { "1", "2", "3", "4", "5", "6", "7", "8", 
-				"9", "10", "11" };
-		final JComboBox<String> combo = new JComboBox<>(levelStrings);
+	private int levelSelect() {
+		int[] levels = _wl.getLevels();
+		String[] levelStrings=Arrays.toString(levels).split("[\\[\\]]")[1].split(", "); 
 
-		
 		String num = (String) JOptionPane.showInputDialog(this, "Please select a level", "Level Select", 
 				JOptionPane.PLAIN_MESSAGE, null, levelStrings, levelStrings[0]);
-		
-		
+
+
 		if(num==null){
-			this.dispose();
+			return 0;
 		}else{
-		_level = Integer.parseInt(num);
-		this.setVisible(true);
+			return Integer.parseInt(num);
 		} 
 	}
 }

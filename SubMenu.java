@@ -51,6 +51,17 @@ public class SubMenu extends JPanel {
 		lblQuizFinished.setBounds(10, 72, 454, 45);
 		this.add(lblQuizFinished);
 		
+		WordList wl = null;
+		try {
+			wl = new WordList(_file);
+		} catch (IOException e2) {
+			e2.printStackTrace();
+		}
+		
+		int wc = wl.getWordCount(level);
+		if (wc < maxNum) {
+			maxNum = wc;
+		}
 		JLabel lblNewLabel = new JLabel("You scored: " + correct + "/" + maxNum);
 		lblNewLabel.setFont(new Font("Calibri Light", Font.PLAIN, 16));
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -76,6 +87,7 @@ public class SubMenu extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				setVisible(false);
 				Menu menu = new Menu(_level, _main, _file, _maxNum);
 				_main.getContentPane().add(menu);
 				menu.setVisible(true);

@@ -144,7 +144,7 @@ public class WordList {
 		if (index + 1 == _levelArray.size()) {
 			return level;
 		} else {
-			return level + 1;
+			return _levelArray.get(index + 1);
 		}
 	}
 	

@@ -186,10 +186,19 @@ public class Menu extends JPanel {
 	//Creates save files to store the accuracy, then add zeros to the file. There is a save 
 	//file for each level
 	private void createAccuracy() {
-
+		WordList wl = null;
 		try {
-			for (int i = 1; i <= 11; i++) {
-				File accuracy = new File(".accuracy_" + i);
+			wl = new WordList(_file);
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+		int[] levels = wl.getLevels();
+		int size = levels.length;
+		try {
+			for (int i = 0; i < size; i++) {
+				File accuracy = new File(".accuracy_" + levels[i]);
 				if (! accuracy.exists()) {
 					accuracy.createNewFile();
 
@@ -217,7 +226,4 @@ public class Menu extends JPanel {
 		}
 	}
 
-	public void nextLevel(){
-		_level++;
-	}
 }

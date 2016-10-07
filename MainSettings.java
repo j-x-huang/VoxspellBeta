@@ -12,8 +12,11 @@ import javax.swing.JOptionPane;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Arrays;
 
 import javax.swing.SwingConstants;
@@ -128,6 +131,16 @@ public class MainSettings extends JPanel {
 				if (level != 0) {
 					try {
 						_oldMenu.clearStats();
+						
+						File listFile = new File(".defaultList.txt");
+						PrintWriter pw = new PrintWriter(listFile);
+						pw.close();
+
+						FileWriter fw = new FileWriter(listFile);
+						BufferedWriter bw = new BufferedWriter(fw);
+						String path = file.getAbsolutePath();
+						bw.write(path);
+						bw.close();
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
