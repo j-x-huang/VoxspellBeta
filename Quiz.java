@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -62,6 +63,8 @@ public class Quiz extends JPanel implements ActionListener {
 	private int incorrect;
 
 	private JFrame _frame;
+	private WordList _wordlist;
+	private int _hiddenCoins;
 
 
 	/**
@@ -72,7 +75,10 @@ public class Quiz extends JPanel implements ActionListener {
 		_level = level;
 		_frame = frame;
 		_maxNum = maxNum;
+		_wordlist = new WordList(_file);
+
 		getAccuracy();
+		getCoins();
 
 		getVoices();
 		_voice = _voices.get(0);
@@ -132,7 +138,7 @@ public class Quiz extends JPanel implements ActionListener {
 		lblCoin.setIcon(new ImageIcon("Coin1.png"));
 		lblCoin.setBounds(334, 309, 140, 37);
 		this.add(lblCoin);
-		
+
 		lblStreak.setFont(new Font("Calibri", Font.PLAIN, 15));
 		lblStreak.setBounds(300, 309, 70, 37);
 		this.add(lblStreak);
@@ -167,11 +173,9 @@ public class Quiz extends JPanel implements ActionListener {
 
 		//Getting the words and doing the Please Spell Stuff
 
-		WordList wordlist = null;
 		//Creating the wordlist using the file name
-		wordlist = new WordList(_file);
 
-		_wc = wordlist.getWordCount(_level);
+		_wc = _wordlist.getWordCount(_level);
 
 		//Choosing the number of quiz depending on the word count
 		String tts = "";
@@ -190,7 +194,7 @@ public class Quiz extends JPanel implements ActionListener {
 
 		_frame.getRootPane().setDefaultButton(btnSubmit);
 		//Word to be tested
-		setTestList(wordlist);
+		setTestList(_wordlist);
 		festival(_testList.get(_testNo-1));
 	}
 
@@ -229,15 +233,18 @@ public class Quiz extends JPanel implements ActionListener {
 
 				if (_streak >5) {
 					_coins+=50;
+					_hiddenCoins+=50;
 					lblStreak.setText("+50");
 				} else if (_streak > 2) {
 					_coins+=20;
+					_hiddenCoins+=20;
 					lblStreak.setText("+20");
 				} else {
 					_coins+=10;
+					_hiddenCoins+=10;
 					lblStreak.setText("+10");
 				}
-
+				updateCoins();
 				lblCoin.setText("Coins: "+ _coins);
 
 				//Setting the new label
@@ -380,164 +387,195 @@ public class Quiz extends JPanel implements ActionListener {
 
 		}
 	}
-	//Write the values from the accuracy fields (_attempts, _fails) to the corresponding
-	// save files
-	private void updateAccuracy() throws IOException {
-		File accuracy = new File(".accuracy_" + _level);
+	private void getCoins() throws IOException{
+		File file = new File(".coinSave");
+		if (! file.exists()) {
+			file.createNewFile();
+		} else {
+			FileReader fr = new FileReader(file);
+			BufferedReader br = new BufferedReader(fr);
+			String str;
+			str = br.readLine();
+			_hiddenCoins = Integer.parseInt(str);
+		}
+	}
 
-		PrintWriter pw = new PrintWriter(accuracy);
+private void updateCoins() {
+	File file = new File(".coinSave");
+
+	PrintWriter pw;
+	try {
+		pw = new PrintWriter(file);
 		pw.close();
 
-		FileWriter fw = new FileWriter(accuracy);
+		FileWriter fw = new FileWriter(file);
 		BufferedWriter bw = new BufferedWriter(fw);
 
-		bw.write(_attempts + "\n");
-		bw.write(_fails + "\n");
+		bw.write(_hiddenCoins + "\n");
 		bw.close();
+	} catch (IOException e) {
+		e.printStackTrace();
 	}
 
-	//Putting Failed word into failed list
-	private void failed() throws IOException{
-		File failed = new File(".failed"+_level);
-		//If file does not exist, create new file
-		if(!failed.exists()) {
-			failed.createNewFile();
-		} 
+}
+//Write the values from the accuracy fields (_attempts, _fails) to the corresponding
+// save files
+private void updateAccuracy() throws IOException {
+	File accuracy = new File(".accuracy_" + _level);
 
-		//Appending the word to the file
-		Writer output;
-		output = new BufferedWriter(new FileWriter(failed,true)); 
-		output.append(_testList.get(_testNo-1)+"\n");
-		output.close();
+	PrintWriter pw = new PrintWriter(accuracy);
+	pw.close();
+
+	FileWriter fw = new FileWriter(accuracy);
+	BufferedWriter bw = new BufferedWriter(fw);
+
+	bw.write(_attempts + "\n");
+	bw.write(_fails + "\n");
+	bw.close();
+}
+
+//Putting Failed word into failed list
+private void failed() throws IOException{
+	File failed = new File(".failed"+_level);
+	//If file does not exist, create new file
+	if(!failed.exists()) {
+		failed.createNewFile();
+	} 
+
+	//Appending the word to the file
+	Writer output;
+	output = new BufferedWriter(new FileWriter(failed,true)); 
+	output.append(_testList.get(_testNo-1)+"\n");
+	output.close();
+}
+
+private void removeFailed(String word) throws IOException{
+	File failed = new File(".failed"+_level);
+	//If file does not exist, create new file
+	if(!failed.exists()) {
+		failed.createNewFile();
+	} 
+	//Creating temporary file to store data
+	File temp = new File(".temp");
+	if(!temp.exists())
+		temp.createNewFile();
+
+	//Choosing input and output files
+	BufferedReader input = new BufferedReader(new FileReader("."+File.separator+failed));
+	PrintWriter output= new PrintWriter(new FileWriter("."+File.separator+temp));
+
+	String line;
+
+	//Reading word where and adding it to arrayList if it is not an empty line
+	while ((line = input.readLine()) != null){
+		//If the line does not equal to line to remove, it is copied to temp file
+		if(!word.equalsIgnoreCase(line.trim())){
+			output.println(line);
+			output.flush();
+		}	
 	}
 
-	private void removeFailed(String word) throws IOException{
-		File failed = new File(".failed"+_level);
-		//If file does not exist, create new file
-		if(!failed.exists()) {
-			failed.createNewFile();
-		} 
-		//Creating temporary file to store data
-		File temp = new File(".temp");
-		if(!temp.exists())
-			temp.createNewFile();
+	//Closing input output streams
+	input.close();
+	output.close();
 
-		//Choosing input and output files
-		BufferedReader input = new BufferedReader(new FileReader("."+File.separator+failed));
-		PrintWriter output= new PrintWriter(new FileWriter("."+File.separator+temp));
+	//Delete orginal file
+	failed.delete();
 
-		String line;
+	//Changing output file to be the failed list file.
+	temp.renameTo(failed);
+}
 
-		//Reading word where and adding it to arrayList if it is not an empty line
-		while ((line = input.readLine()) != null){
-			//If the line does not equal to line to remove, it is copied to temp file
-			if(!word.equalsIgnoreCase(line.trim())){
-				output.println(line);
-				output.flush();
-			}	
+//Adding failed word to the failed_total list
+private void failedTotal() throws IOException{
+	File failed = new File(".failed_total"+_level);
+	//If file does not exist, create new file
+	if(!failed.exists()) {
+		failed.createNewFile();
+	} 
+
+	//Appending the word to the file
+	Writer output;
+	output = new BufferedWriter(new FileWriter(failed,true)); 
+	output.append(_testList.get(_testNo-1)+"\n");
+	output.close();
+}
+
+private void makeTable() {
+	ViewAccuracy va = new ViewAccuracy();
+	JTable table = new JTable(va);
+	final JFrame fr = new JFrame();
+	fr.setSize(500,500);
+	fr.setVisible(true);
+	//Create panels for Statistics. Add table to panel.
+	JPanel statsPanel = new JPanel();
+	JButton returnBtn = new JButton("Close Stats");
+	statsPanel.setLayout(new BorderLayout());
+	//statsPanel.add(_statLabel, BorderLayout.NORTH);
+	statsPanel.add(new JScrollPane(table), BorderLayout.CENTER);
+	returnBtn.addActionListener(new ActionListener() {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			fr.dispose();
 		}
 
-		//Closing input output streams
-		input.close();
-		output.close();
+	});
+	statsPanel.add(returnBtn, BorderLayout.SOUTH);
+	fr.add(statsPanel);
+}
 
-		//Delete orginal file
-		failed.delete();
+public class Settings extends JFrame {
 
-		//Changing output file to be the failed list file.
-		temp.renameTo(failed);
-	}
+	private JPanel contentPane;
 
-	//Adding failed word to the failed_total list
-	private void failedTotal() throws IOException{
-		File failed = new File(".failed_total"+_level);
-		//If file does not exist, create new file
-		if(!failed.exists()) {
-			failed.createNewFile();
-		} 
+	/**
+	 * Create the frame.
+	 */
+	public Settings() {
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setBounds(100, 100, 346, 215);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
 
-		//Appending the word to the file
-		Writer output;
-		output = new BufferedWriter(new FileWriter(failed,true)); 
-		output.append(_testList.get(_testNo-1)+"\n");
-		output.close();
-	}
+		JLabel lblChangeVoice = new JLabel("Change Voice");
+		lblChangeVoice.setBounds(10, 99, 85, 24);
+		contentPane.add(lblChangeVoice);
 
-	private void makeTable() {
-		ViewAccuracy va = new ViewAccuracy();
-		JTable table = new JTable(va);
-		final JFrame fr = new JFrame();
-		fr.setSize(500,500);
-		fr.setVisible(true);
-		//Create panels for Statistics. Add table to panel.
-		JPanel statsPanel = new JPanel();
-		JButton returnBtn = new JButton("Close Stats");
-		statsPanel.setLayout(new BorderLayout());
-		//statsPanel.add(_statLabel, BorderLayout.NORTH);
-		statsPanel.add(new JScrollPane(table), BorderLayout.CENTER);
-		returnBtn.addActionListener(new ActionListener() {
+		String[] voices = _voices.toArray(new String[_voices.size()]);
 
-			@Override
+		final JComboBox<String> comboBox = new JComboBox<String>(voices);
+		comboBox.setBounds(118, 101, 186, 20);
+		contentPane.add(comboBox);
+
+		JLabel lblSettings = new JLabel("Settings");
+		lblSettings.setHorizontalAlignment(SwingConstants.CENTER);
+		lblSettings.setFont(new Font("Calibri Light", Font.PLAIN, 25));
+		lblSettings.setBounds(10, 11, 310, 24);
+		contentPane.add(lblSettings);
+
+		JLabel lblMute = new JLabel("Mute background");
+		lblMute.setBounds(10, 74, 99, 14);
+		contentPane.add(lblMute);
+
+		JToggleButton toggleButton = new JToggleButton("");
+		toggleButton.setIcon(new ImageIcon("mute2.png"));
+		toggleButton.setBounds(118, 50, 57, 40);
+		contentPane.add(toggleButton);
+
+		JButton btnOK = new JButton("Ok");
+		btnOK.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				fr.dispose();
+				String data = (String) comboBox.getItemAt(comboBox.getSelectedIndex());
+				_voice = data;
+				dispose();
 			}
-
 		});
-		statsPanel.add(returnBtn, BorderLayout.SOUTH);
-		fr.add(statsPanel);
+		btnOK.setBounds(215, 132, 89, 23);
+		contentPane.add(btnOK);
 	}
-
-	public class Settings extends JFrame {
-
-		private JPanel contentPane;
-
-		/**
-		 * Create the frame.
-		 */
-		public Settings() {
-			setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-			setBounds(100, 100, 346, 215);
-			contentPane = new JPanel();
-			contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-			setContentPane(contentPane);
-			contentPane.setLayout(null);
-
-			JLabel lblChangeVoice = new JLabel("Change Voice");
-			lblChangeVoice.setBounds(10, 99, 85, 24);
-			contentPane.add(lblChangeVoice);
-
-			String[] voices = _voices.toArray(new String[_voices.size()]);
-
-			final JComboBox<String> comboBox = new JComboBox<String>(voices);
-			comboBox.setBounds(118, 101, 186, 20);
-			contentPane.add(comboBox);
-
-			JLabel lblSettings = new JLabel("Settings");
-			lblSettings.setHorizontalAlignment(SwingConstants.CENTER);
-			lblSettings.setFont(new Font("Calibri Light", Font.PLAIN, 25));
-			lblSettings.setBounds(10, 11, 310, 24);
-			contentPane.add(lblSettings);
-
-			JLabel lblMute = new JLabel("Mute background");
-			lblMute.setBounds(10, 74, 99, 14);
-			contentPane.add(lblMute);
-
-			JToggleButton toggleButton = new JToggleButton("");
-			toggleButton.setIcon(new ImageIcon("mute2.png"));
-			toggleButton.setBounds(118, 50, 57, 40);
-			contentPane.add(toggleButton);
-
-			JButton btnOK = new JButton("Ok");
-			btnOK.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					String data = (String) comboBox.getItemAt(comboBox.getSelectedIndex());
-					_voice = data;
-					dispose();
-				}
-			});
-			btnOK.setBounds(215, 132, 89, 23);
-			contentPane.add(btnOK);
-		}
-	}
+}
 
 }

@@ -26,7 +26,6 @@ public class Main extends JFrame{
 		setContentPane(contentPane);
 		contentPane.setLayout(new CardLayout(0, 0));
 		
-		createAccuracy();
 		levelSelect();
 		
 		File file = new File("NZCER-spelling-lists.txt");
@@ -49,30 +48,7 @@ public class Main extends JFrame{
 		});
 	}
 	
-	//Creates save files to store the accuracy, then add zeros to the file. There is a save 
-	//file for each level
-	private void createAccuracy() {
 
-		for (int i = 1; i <= 11; i++) {
-			try {
-				File accuracy = new File(".accuracy_" + i);
-				if (! accuracy.exists()) {
-					accuracy.createNewFile();
-
-					FileWriter fw = new FileWriter(accuracy);
-					BufferedWriter bw = new BufferedWriter(fw);
-
-					bw.write("0" + "\n");
-					bw.write("0" + "\n");
-
-					bw.close();
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-
-		}
-	}
 	
 	private void levelSelect() {
 		String[] levelStrings = { "1", "2", "3", "4", "5", "6", "7", "8", 

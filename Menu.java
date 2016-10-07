@@ -42,8 +42,8 @@ public class Menu extends JPanel {
 		_level = level;
 		_file = file;
 		_wordNum = wordNum;
-		
 
+		createAccuracy();
 
 		//Menu Panel Stuff
 		this.setBackground(new Color(255, 255, 153));
@@ -133,7 +133,7 @@ public class Menu extends JPanel {
 				setVisible(false);
 				ms.setVisible(true);
 			}
-			
+
 		});
 		this.add(btnSettings);
 
@@ -188,8 +188,8 @@ public class Menu extends JPanel {
 	//file for each level
 	private void createAccuracy() {
 
-		for (int i = 1; i <= 11; i++) {
-			try {
+		try {
+			for (int i = 1; i <= 11; i++) {
 				File accuracy = new File(".accuracy_" + i);
 				if (! accuracy.exists()) {
 					accuracy.createNewFile();
@@ -202,10 +202,19 @@ public class Menu extends JPanel {
 
 					bw.close();
 				}
-			} catch (IOException e) {
-				e.printStackTrace();
+			} 
+			File coin = new File(".coinSave");
+			if (! coin.exists()) {
+				coin.createNewFile();
+				
+				FileWriter fw = new FileWriter(coin);
+				BufferedWriter bw = new BufferedWriter(fw);
+				
+				bw.write("0" + "\n");
 			}
 
+		}catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 
