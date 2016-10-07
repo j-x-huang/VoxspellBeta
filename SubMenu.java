@@ -110,6 +110,15 @@ public class SubMenu extends JPanel {
 		this.add(btnViewStatistics);
 		
 		btnWatchVideo.setBounds(170, 370, 135, 35);
+		btnWatchVideo.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				MediaPlayer mp = new MediaPlayer();
+				
+			}
+			
+		});
 		this.add(btnWatchVideo);
 		
 		btnAdvance.setBounds(170, 190, 135, 35);

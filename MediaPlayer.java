@@ -12,6 +12,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
+import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
@@ -49,32 +50,46 @@ public class MediaPlayer {
 		mediaFrame.setContentPane(panel);
 		
 		//add pause button and a progress bar
-		final JButton pauseBtn = new JButton("Pause");
+		final JToggleButton pauseBtn = new JToggleButton("| |");
 
 		JPanel secondPanel = new JPanel(new GridLayout(2,1));
 		panel.add(secondPanel, BorderLayout.SOUTH);
 		final JProgressBar pb = new JProgressBar();
 		pb.setValue(0);
-		secondPanel.add(pauseBtn);
 		secondPanel.add(pb);
 		pauseBtn.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				video.pause();	
-				if (pause) {
-					pauseBtn.setText("Play");
-					pause = false;
-				} else {
-					pauseBtn.setText("Pause");
-					pause = true;
-				}
 			}
 
 		});
 		
+		JPanel btnPanel = new JPanel();
+		JButton btnSkip = new JButton(">>");
+        btnSkip.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				video.skip(5000);
+			}
+		});
+        
+        JButton btnSkipBack = new JButton("<<");
+        btnSkipBack.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				video.skip(-5000);
+			}
+		});
+        
+        btnPanel.add(btnSkipBack);
+        btnPanel.add(pauseBtn);
+        btnPanel.add(btnSkip);
+        
+        secondPanel.add(btnPanel);
 		//Progress Bar shows how long the video has been playing
-		Timer timer = new Timer(50, new ActionListener() {
+		Timer timer = new Timer(500, new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -88,7 +103,7 @@ public class MediaPlayer {
 		});
 
 		timer.start();	
-		mediaPath = "big_buck_bunny_1_minute.avi";
+		mediaPath = "final.avi";
 		
 		//Video stops playing after frame closes
 		mediaFrame.addWindowListener(new WindowAdapter() {
