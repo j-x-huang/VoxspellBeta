@@ -120,38 +120,39 @@ public class MainSettings extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				File file = _file;
 				int spinnerVal = (int) spinner.getValue();
-				int level = 0;
-				try {
-					_wl = new WordList(file);
-					level = levelSelect();
-
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
-				if (level != 0) {
+				if (! file.equals(_oldFile)) { 
 					try {
-						_oldMenu.clearStats();
-						
-						File listFile = new File(".defaultList.txt");
-						PrintWriter pw = new PrintWriter(listFile);
-						pw.close();
+						_wl = new WordList(file);
+						_level = levelSelect();
 
-						FileWriter fw = new FileWriter(listFile);
-						BufferedWriter bw = new BufferedWriter(fw);
-						String path = file.getAbsolutePath();
-						bw.write(path);
-						bw.close();
 					} catch (IOException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
-					Menu menu = new Menu(level, _frame, file, spinnerVal);
-					_frame.getContentPane().add(menu);
-					setVisible(false);
-					menu.setVisible(true);
-				}
+					if (_level != 0) {
+						try {
+							_oldMenu.clearStats();
 
+							File listFile = new File(".defaultList.txt");
+							PrintWriter pw = new PrintWriter(listFile);
+							pw.close();
+
+							FileWriter fw = new FileWriter(listFile);
+							BufferedWriter bw = new BufferedWriter(fw);
+							String path = file.getAbsolutePath();
+							bw.write(path);
+							bw.close();
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+					}
+				}
+				Menu menu = new Menu(_level, _frame, _wl, spinnerVal, file);
+				_frame.getContentPane().add(menu);
+				setVisible(false);
+				menu.setVisible(true);
 			}
+
 
 		});
 		this.add(button_1);
@@ -162,7 +163,13 @@ public class MainSettings extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Menu menu = new Menu(_level, _frame, _oldFile, _maxNum);
+				try {
+					_wl = new WordList(_oldFile);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				Menu menu = new Menu(_level, _frame, _wl, _maxNum, _oldFile);
 				_frame.getContentPane().add(menu);
 				setVisible(false);
 				menu.setVisible(true);
@@ -173,8 +180,8 @@ public class MainSettings extends JPanel {
 
 
 	private int levelSelect() {
-		
-		
+
+
 		int[] levels = _wl.getLevels();
 		String[] levelStrings=Arrays.toString(levels).split("[\\[\\]]")[1].split(", "); 
 

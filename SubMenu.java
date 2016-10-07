@@ -18,7 +18,6 @@ import javax.swing.SwingConstants;
 
 public class SubMenu extends JPanel {
 
-	private File _file;
 	private JPanel _menu;
 	private JFrame _main;
 	private int _level;
@@ -29,18 +28,21 @@ public class SubMenu extends JPanel {
 	private JButton btnWatchVideo = new JButton("Watch Video");
 	private JButton btnAdvance = new JButton("Advance ");
 	private int _maxNum;
+	private WordList _wordList;
+	private File _file;
 
 
 	/**
 	 * Create the panel.
 	 */
-	public SubMenu(File file, int level, int correct, int testNum, JFrame main, int maxNum) {
+	public SubMenu(WordList wordlist, int level, int correct, int testNum, JFrame main, int maxNum, File file) {
 		
 		//Setting the size of the main menu and choosing the layout of it.
-		_file = file;
+		_wordList = wordlist;
 		_main = main;
 		_level = level;
 		_maxNum = maxNum;
+		_file = file;
 		
 		this.setBackground(new Color(255, 255, 102));
 		this.setLayout(null);
@@ -51,14 +53,8 @@ public class SubMenu extends JPanel {
 		lblQuizFinished.setBounds(10, 72, 454, 45);
 		this.add(lblQuizFinished);
 		
-		WordList wl = null;
-		try {
-			wl = new WordList(_file);
-		} catch (IOException e2) {
-			e2.printStackTrace();
-		}
 		
-		int wc = wl.getWordCount(level);
+		int wc = _wordList.getWordCount(level);
 		if (wc < maxNum) {
 			maxNum = wc;
 		}
@@ -88,7 +84,7 @@ public class SubMenu extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				setVisible(false);
-				Menu menu = new Menu(_level, _main, _file, _maxNum);
+				Menu menu = new Menu(_level, _main, _wordList, _maxNum, _file);
 				_main.getContentPane().add(menu);
 				menu.setVisible(true);
 			}
@@ -103,7 +99,7 @@ public class SubMenu extends JPanel {
 				setVisible(false);
 				Quiz q = null;
 				try {
-					q = new Quiz(_file, _level, _main, _maxNum);
+					q = new Quiz(_wordList, _level, _main, _maxNum, _file);
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
@@ -151,7 +147,7 @@ public class SubMenu extends JPanel {
 				}
 				int nextLevel = wl.getNextLevel(_level);
 				setVisible(false);
-				Menu menu = new Menu(nextLevel, _main, _file, _maxNum);
+				Menu menu = new Menu(nextLevel, _main, _wordList, _maxNum, _file);
 				_main.getContentPane().add(menu);
 				menu.setVisible(true);
 			}
@@ -161,7 +157,7 @@ public class SubMenu extends JPanel {
 	}
 	
 	private void makeTable() {
-		ViewAccuracy va = new ViewAccuracy(_file);
+		ViewAccuracy va = new ViewAccuracy(_wordList);
 		JTable table = new JTable(va);
 		final JFrame fr = new JFrame();
 		fr.setSize(500,500);

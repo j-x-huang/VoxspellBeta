@@ -29,14 +29,8 @@ public class ViewAccuracy extends AbstractTableModel{
 	private int _size;
 	private int[] _levels;
 
-	public ViewAccuracy(File file) {
-		WordList wl = null;
-		try {
-			wl = new WordList(file);
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+	public ViewAccuracy(WordList wordlist) {
+		WordList wl = wordlist;
 
 		_levels = wl.getLevels();
 		_size = _levels.length;

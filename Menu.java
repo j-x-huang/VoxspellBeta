@@ -30,18 +30,21 @@ public class Menu extends JPanel {
 	JLabel lblLevel = new JLabel();
 
 	private int _level;
-	private File _file;
 	private JFrame _frame;
 	private int _wordNum;
+	private File _file;
+
+	private WordList _wordlist;
 
 	/**
 	 * Create the frame.
 	 */
-	public Menu(int level, JFrame frame, File file, int wordNum) {
+	public Menu(int level, JFrame frame, WordList wordlist, int wordNum, File file) {
 		_frame = frame;
 		_level = level;
-		_file = file;
+		_wordlist = wordlist;
 		_wordNum = wordNum;
+		_file = file;
 
 		createAccuracy();
 
@@ -70,20 +73,14 @@ public class Menu extends JPanel {
 					JOptionPane.showMessageDialog(null, "No wordlist file is found!!\n(Please place wordlist file in the working directory)");
 					//If there is no word inside the lsit
 				}else{ 
-					WordList word = null;
-					try {
-						word = new WordList(_file);
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-					if(word.getWordCount(_level)<1){
+					
+					if(_wordlist.getWordCount(_level)<1){
 						JOptionPane.showMessageDialog(null, "No word to be tested!!");
 					}else{
 						//else start the quiz
 						Quiz q;
 						try {
-							q = new Quiz(_file, _level, _frame, _wordNum);
+							q = new Quiz(_wordlist, _level, _frame, _wordNum, _file);
 
 							_frame.getContentPane().add(q);
 							setVisible(false);
@@ -148,7 +145,7 @@ public class Menu extends JPanel {
 	}
 
 	protected void makeTable() {
-		ViewAccuracy va = new ViewAccuracy(_file);
+		ViewAccuracy va = new ViewAccuracy(_wordlist);
 		JTable table = new JTable(va);
 		final JPanel statsPanel = new JPanel();
 		//Add a close button to close the frame

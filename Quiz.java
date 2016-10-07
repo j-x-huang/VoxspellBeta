@@ -43,7 +43,6 @@ public class Quiz extends JPanel implements ActionListener {
 	private String _voice;
 	private JComboBox<String> _selectVoices;
 	private JPanel _main;
-	private File _file;
 	private int _wc;
 	private int _testNum;
 	private int _coins = 0;
@@ -65,17 +64,18 @@ public class Quiz extends JPanel implements ActionListener {
 	private JFrame _frame;
 	private WordList _wordlist;
 	private int _hiddenCoins;
+	private File _file;
 
 
 	/**
 	 * Create the panel.
 	 */
-	public Quiz(File file,int level, JFrame frame, int maxNum) throws  Exception {
-		_file=file;
+	public Quiz(WordList wordlist,int level, JFrame frame, int maxNum, File file) throws  Exception {
 		_level = level;
 		_frame = frame;
 		_maxNum = maxNum;
-		_wordlist = new WordList(_file);
+		_wordlist = wordlist;
+		_file = file;
 
 		getAccuracy();
 		getCoins();
@@ -256,6 +256,7 @@ public class Quiz extends JPanel implements ActionListener {
 				incorrect =0;
 				//If user gets incorrect
 			}else{
+				lblStreak.setText("");
 				//If second time failing
 				if(incorrect<1){
 					//Setting message to the user about the fault
@@ -302,7 +303,7 @@ public class Quiz extends JPanel implements ActionListener {
 				lblCorrect.setText(lblCorrect.getText()+" Quiz Finished!!");
 				festival(lblCorrect.getText());
 				//opens options menu where user can choose their next action.
-				SubMenu sub = new SubMenu(_file,_level,_correct,_testNo-1, _frame , _maxNum);
+				SubMenu sub = new SubMenu(_wordlist,_level,_correct,_testNo-1, _frame , _maxNum, _file);
 				_frame.getContentPane().add(sub);
 				this.setVisible(false);
 				sub.setVisible(true);
@@ -502,7 +503,7 @@ private void failedTotal() throws IOException{
 }
 
 private void makeTable() {
-	ViewAccuracy va = new ViewAccuracy(_file);
+	ViewAccuracy va = new ViewAccuracy(_wordlist);
 	JTable table = new JTable(va);
 	final JFrame fr = new JFrame();
 	fr.setSize(500,500);

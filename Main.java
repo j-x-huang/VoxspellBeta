@@ -44,7 +44,7 @@ public class Main extends JFrame{
 		}
 		_level = levelSelect();
 		
-		Menu menu = new Menu(_level, this, _mainFile, 10);
+		Menu menu = new Menu(_level, this, _wl, 10, _mainFile);
 		contentPane.add(menu);
 		menu.setVisible(true);
 	}
