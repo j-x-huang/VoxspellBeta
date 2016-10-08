@@ -148,28 +148,11 @@ public class Menu extends JPanel {
 	}
 
 	protected void makeTable() {
-		ViewAccuracy va = new ViewAccuracy(_wordlist);
-		JTable table = new JTable(va);
-		final JPanel statsPanel = new JPanel();
-		//Add a close button to close the frame
-		JButton returnBtn = new JButton("Close Stats");
-		statsPanel.setLayout(new BorderLayout());
-		statsPanel.add(new JScrollPane(table), BorderLayout.CENTER);
-		returnBtn.addActionListener(new ActionListener() {
+		ViewAccuracy va = new ViewAccuracy(_wordlist, this);
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				statsPanel.setVisible(false);
-				setVisible(true);
-
-			}
-
-		});
-		statsPanel.add(returnBtn, BorderLayout.SOUTH);
-
-		_frame.getContentPane().add(statsPanel);
+		_frame.getContentPane().add(va);
 		this.setVisible(false);
-		statsPanel.setVisible(true);
+		va.setVisible(true);
 
 	}
 

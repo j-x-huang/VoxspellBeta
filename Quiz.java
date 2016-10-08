@@ -505,27 +505,11 @@ private void failedTotal() throws IOException{
 }
 
 private void makeTable() {
-	ViewAccuracy va = new ViewAccuracy(_wordlist);
-	JTable table = new JTable(va);
-	final JFrame fr = new JFrame();
-	fr.setSize(500,500);
-	fr.setVisible(true);
-	//Create panels for Statistics. Add table to panel.
-	JPanel statsPanel = new JPanel();
-	JButton returnBtn = new JButton("Close Stats");
-	statsPanel.setLayout(new BorderLayout());
-	//statsPanel.add(_statLabel, BorderLayout.NORTH);
-	statsPanel.add(new JScrollPane(table), BorderLayout.CENTER);
-	returnBtn.addActionListener(new ActionListener() {
+	ViewAccuracy va = new ViewAccuracy(_wordlist, this);
 
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			fr.dispose();
-		}
-
-	});
-	statsPanel.add(returnBtn, BorderLayout.SOUTH);
-	fr.add(statsPanel);
+	_frame.getContentPane().add(va);
+	this.setVisible(false);
+	va.setVisible(true);
 }
 
 public class Settings extends JFrame {

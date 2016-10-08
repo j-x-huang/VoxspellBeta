@@ -136,14 +136,14 @@ public class MainSettings extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				File file = _file;
 				int spinnerVal = (int) spinner.getValue();
-				if (! file.equals(_oldFile)) { 
-					try {
-						_wl = new WordList(file);
-						_level = levelSelect();
+				try {
+					_wl = new WordList(file);
 
-					} catch (IOException e1) {
-						e1.printStackTrace();
-					}
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+				if (! file.equals(_oldFile)) { 
+					_level = levelSelect();
 					if (_level != 0) {
 						try {
 							_oldMenu.clearStats();

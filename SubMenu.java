@@ -54,11 +54,7 @@ public class SubMenu extends JPanel {
 		this.add(lblQuizFinished);
 		
 		
-		int wc = _wordList.getWordCount(level);
-		if (wc < maxNum) {
-			maxNum = wc;
-		}
-		JLabel lblNewLabel = new JLabel("You scored: " + correct + "/" + maxNum);
+		JLabel lblNewLabel = new JLabel("You scored: " + correct + "/" + testNum);
 		lblNewLabel.setFont(new Font("Calibri Light", Font.PLAIN, 16));
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setBounds(10, 120, 454, 28);
@@ -158,27 +154,11 @@ public class SubMenu extends JPanel {
 	}
 	
 	private void makeTable() {
-		ViewAccuracy va = new ViewAccuracy(_wordList);
-		JTable table = new JTable(va);
-		final JFrame fr = new JFrame();
-		fr.setSize(500,500);
-		fr.setVisible(true);
-		//Create panels for Statistics. Add table to panel.
-		JPanel statsPanel = new JPanel();
-		JButton returnBtn = new JButton("Close Stats");
-		statsPanel.setLayout(new BorderLayout());
-		//statsPanel.add(_statLabel, BorderLayout.NORTH);
-		statsPanel.add(new JScrollPane(table), BorderLayout.CENTER);
-		returnBtn.addActionListener(new ActionListener() {
+		ViewAccuracy va = new ViewAccuracy(_wordList, this);
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				fr.dispose();
-			}
-
-		});
-		statsPanel.add(returnBtn, BorderLayout.SOUTH);
-		fr.add(statsPanel);
+		_main.getContentPane().add(va);
+		this.setVisible(false);
+		va.setVisible(true);
 	}
 
 }
