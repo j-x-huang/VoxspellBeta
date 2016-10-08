@@ -96,13 +96,14 @@ public class SubMenu extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				setVisible(false);
 				Quiz q = null;
 				try {
 					q = new Quiz(_wordList, _level, _main, _maxNum, _file);
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
+				_main.getContentPane().add(q);
+				setVisible(false);
 				q.setVisible(true);
 			}
 			

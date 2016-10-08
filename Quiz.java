@@ -188,6 +188,8 @@ public class Quiz extends JPanel implements ActionListener {
 			tts="Spell word 1 of "+_maxNum+": ";
 			lblPleaseSpellWord.setText(tts);
 		}
+		lblAcc.setText("Accuracy: 0" +"/"+_testNum);
+		
 		btnListenAgain.addActionListener(this);
 		btnSubmit.addActionListener(this);
 		btnStatistics.addActionListener(this);
