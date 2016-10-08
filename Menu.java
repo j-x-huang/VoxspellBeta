@@ -36,15 +36,18 @@ public class Menu extends JPanel {
 
 	private WordList _wordlist;
 
+	private Sound _sound;
+
 	/**
 	 * Create the frame.
 	 */
-	public Menu(int level, JFrame frame, WordList wordlist, int wordNum, File file) {
+	public Menu(int level, JFrame frame, WordList wordlist, int wordNum, File file, Sound sound) {
 		_frame = frame;
 		_level = level;
 		_wordlist = wordlist;
 		_wordNum = wordNum;
 		_file = file;
+		_sound = sound;
 
 		createAccuracy();
 
@@ -125,7 +128,7 @@ public class Menu extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				MainSettings ms = new MainSettings(_frame, _file, _wordNum, _level, Menu.this);
+				MainSettings ms = new MainSettings(_frame, _file, _wordNum, _level, Menu.this, _sound);
 				_frame.getContentPane().add(ms);
 				setVisible(false);
 				ms.setVisible(true);

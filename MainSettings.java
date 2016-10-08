@@ -12,6 +12,8 @@ import javax.swing.JOptionPane;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -39,18 +41,20 @@ public class MainSettings extends JPanel {
 	private WordList _wl;
 	private int _level;
 	private Menu _oldMenu;
+	private Sound _sound;
 
 
 	/**
 	 * Create the frame.
 	 */
-	public MainSettings(JFrame frame, File file, int maxNum, int level, Menu menu) {
+	public MainSettings(JFrame frame, File file, int maxNum, int level, Menu menu, Sound sound) {
 		_frame = frame;
 		_file = file;
 		_oldFile = file;
 		_maxNum = maxNum;
 		_level = level;
 		_oldMenu = menu;
+		_sound = sound;
 
 		label_4.setText(file.getName());
 
@@ -68,6 +72,18 @@ public class MainSettings extends JPanel {
 
 		JToggleButton toggleButton = new JToggleButton("");
 		toggleButton.setBounds(245, 68, 57, 40);
+		toggleButton.addItemListener(new ItemListener() {
+
+			@Override
+			public void itemStateChanged(ItemEvent ev) {
+				if(ev.getStateChange()==ItemEvent.SELECTED){
+					_sound.stop();
+				} else if(ev.getStateChange()==ItemEvent.DESELECTED){
+					_sound.loop();
+				}
+
+			}
+		});
 		this.add(toggleButton);
 
 		JLabel label_2 = new JLabel("Number of words tested");
@@ -147,7 +163,7 @@ public class MainSettings extends JPanel {
 						}
 					}
 				}
-				Menu menu = new Menu(_level, _frame, _wl, spinnerVal, file);
+				Menu menu = new Menu(_level, _frame, _wl, spinnerVal, file, _sound);
 				_frame.getContentPane().add(menu);
 				setVisible(false);
 				menu.setVisible(true);
@@ -169,7 +185,7 @@ public class MainSettings extends JPanel {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				Menu menu = new Menu(_level, _frame, _wl, _maxNum, _oldFile);
+				Menu menu = new Menu(_level, _frame, _wl, _maxNum, _oldFile, _sound);
 				_frame.getContentPane().add(menu);
 				setVisible(false);
 				menu.setVisible(true);
