@@ -2,18 +2,24 @@ package beta;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
+
 import javax.swing.SwingConstants;
 
 public class SubMenu extends JPanel {
@@ -32,6 +38,7 @@ public class SubMenu extends JPanel {
 	private File _file;
 	private Sound _sound;
 	private boolean _advance = false;
+	private JButton btnCoins = new JButton("Buy Level(3000)");
 
 
 	/**
@@ -154,9 +161,37 @@ public class SubMenu extends JPanel {
 
 		});
 
+		btnCoins .setBounds(170, 190, 145, 35);
+		btnCoins.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int coin = getCoins();
+				if ((coin - 3000) > 0) {
+					updateCoins(coin - 3000);
+					WordList wl= null;
+					try {
+						wl = new WordList(_file);
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					int nextLevel = wl.getNextLevel(_level);
+					setVisible(false);
+					Menu menu = new Menu(nextLevel, _main, _wordList, _maxNum, _file, _sound );
+					_main.getContentPane().add(menu);
+					menu.setVisible(true);
+				} else {
+					JOptionPane.showMessageDialog(null, "Insufficient funds!", "Error", JOptionPane.ERROR_MESSAGE);
+				}
+			}
+
+		});
+
 		if (_advance) {
 			this.add(btnWatchVideo);
 			this.add(btnAdvance);
+		} else {
+			this.add(btnCoins);
 		}
 	}
 
@@ -167,5 +202,42 @@ public class SubMenu extends JPanel {
 		this.setVisible(false);
 		va.setVisible(true);
 	}
+
+	private int getCoins(){
+
+		int coin = 0;
+		File file = new File(".coinSave");
+		try {
+			FileReader fr = new FileReader(file);
+			BufferedReader br = new BufferedReader(fr);
+			String str;
+			str = br.readLine();
+			coin =  Integer.parseInt(str);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return coin;
+	}
+
+	private void updateCoins(int coin) {
+		File file = new File(".coinSave");
+
+		PrintWriter pw;
+		try {
+			pw = new PrintWriter(file);
+			pw.close();
+
+			FileWriter fw = new FileWriter(file);
+			BufferedWriter bw = new BufferedWriter(fw);
+
+			bw.write(coin + "\n");
+			bw.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
+
 
 }
