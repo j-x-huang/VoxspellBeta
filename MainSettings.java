@@ -1,6 +1,7 @@
 package beta;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -25,6 +26,7 @@ import javax.swing.SwingConstants;
 import javax.swing.JToggleButton;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
@@ -59,19 +61,22 @@ public class MainSettings extends JPanel {
 		label_4.setText(file.getName());
 
 		this.setLayout(null);
+		this.setBackground(new Color(255, 255, 153));
+		
 		JLabel label = new JLabel("Settings");
 		label.setHorizontalAlignment(SwingConstants.CENTER);
 		label.setFont(new Font("Calibri Light", Font.PLAIN, 25));
-		label.setBounds(10, 11, 454, 24);
+		label.setBounds(10, 11, 454, 30);
 		this.add(label);
 
-		JLabel label_1 = new JLabel("Mute background");
+		JLabel label_1 = new JLabel("Stop Music");
 		label_1.setFont(new Font("Calibri", Font.PLAIN, 15));
 		label_1.setBounds(59, 84, 130, 24);
 		this.add(label_1);
 
 		JToggleButton toggleButton = new JToggleButton("");
-		toggleButton.setBounds(245, 68, 57, 40);
+		toggleButton.setIcon(new ImageIcon("mute2.png"));
+		toggleButton.setBounds(285, 68, 57, 40);
 		toggleButton.addItemListener(new ItemListener() {
 
 			@Override
@@ -87,27 +92,27 @@ public class MainSettings extends JPanel {
 		this.add(toggleButton);
 
 		JLabel label_2 = new JLabel("Number of words tested");
-		label_2.setFont(new Font("Calibri", Font.PLAIN, 15));
-		label_2.setBounds(59, 156, 159, 14);
+		label_2.setFont(new Font("Calibri Light", Font.PLAIN, 15));
+		label_2.setBounds(59, 156, 200, 14);
 		this.add(label_2);
 
 		spinner.setModel(new SpinnerNumberModel(maxNum, 5, 20, 1));
-		spinner.setBounds(245, 153, 57, 20);
+		spinner.setBounds(285, 153, 57, 20);
 		this.add(spinner);
 
 
 		JLabel label_3 = new JLabel("Current spelling list:");
-		label_3.setFont(new Font("Calibri", Font.PLAIN, 15));
-		label_3.setBounds(59, 213, 130, 14);
+		label_3.setFont(new Font("Calibri Light", Font.PLAIN, 15));
+		label_3.setBounds(59, 213, 200, 22);
 		this.add(label_3);
 
-		label_4.setFont(new Font("Calibri", Font.PLAIN, 15));
-		label_4.setBounds(245, 213, 112, 14);
+		label_4.setFont(new Font("Calibri Light", Font.PLAIN, 15));
+		label_4.setBounds(285, 213, 200, 22);
 		//---------------------------------------------------
 		final JFileChooser fc = new JFileChooser();
 
 		JButton button = new JButton("Select Spelling List");
-		button.setBounds(245, 250, 119, 23);
+		button.setBounds(285, 250, 170, 23);
 		button.addActionListener(new ActionListener() {
 
 			@Override

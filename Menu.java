@@ -83,7 +83,7 @@ public class Menu extends JPanel {
 						//else start the quiz
 						Quiz q;
 						try {
-							q = new Quiz(_wordlist, _level, _frame, _wordNum, _file);
+							q = new Quiz(_wordlist, _level, _frame, _wordNum, _file, _sound);
 
 							_frame.getContentPane().add(q);
 							setVisible(false);
@@ -99,7 +99,7 @@ public class Menu extends JPanel {
 			}
 		});
 		quizBtn.setFont(new Font("Calibri Light", Font.PLAIN, 20));
-		quizBtn.setBounds(151, 121, 170, 50);
+		quizBtn.setBounds(151, 121, 185, 50);
 		this.add(quizBtn);
 
 		JButton statsBtn = new JButton("View Statistics");
@@ -109,12 +109,12 @@ public class Menu extends JPanel {
 			}
 		});
 		statsBtn.setFont(new Font("Calibri Light", Font.PLAIN, 20));
-		statsBtn.setBounds(151, 195, 170, 50);
+		statsBtn.setBounds(151, 195, 185, 50);
 		this.add(statsBtn);
 
 		JButton clearBtn = new JButton("Clear Statistics");
 		clearBtn.setFont(new Font("Calibri Light", Font.PLAIN, 20));
-		clearBtn.setBounds(151, 270, 170, 50);
+		clearBtn.setBounds(151, 270, 185, 50);
 		this.add(clearBtn);
 
 		lblLevel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -123,7 +123,7 @@ public class Menu extends JPanel {
 
 		JButton btnSettings = new JButton("Settings");
 		btnSettings.setFont(new Font("Calibri Light", Font.PLAIN, 20));
-		btnSettings.setBounds(151, 348, 170, 50);
+		btnSettings.setBounds(151, 348, 185, 50);
 		btnSettings.addActionListener(new ActionListener() {
 
 			@Override

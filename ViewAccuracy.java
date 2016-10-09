@@ -57,6 +57,7 @@ public class ViewAccuracy extends JPanel{
 		
 		this.add(new JScrollPane(table), BorderLayout.CENTER);
 		this.add(returnBtn, BorderLayout.SOUTH);
+		getCoins();
 		JLabel coinLbl = new JLabel("Coins: " + _coins);
 		coinLbl.setHorizontalAlignment(SwingConstants.TRAILING);
 		this.add(coinLbl, BorderLayout.NORTH);
