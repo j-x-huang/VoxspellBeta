@@ -38,7 +38,7 @@ public class SubMenu extends JPanel {
 	private File _file;
 	private Sound _sound;
 	private boolean _advance = false;
-	private JButton btnCoins = new JButton("Buy Level(3000)");
+	private JButton btnCoins = new JButton("Buy Level(1000)");
 
 
 	/**
@@ -166,8 +166,8 @@ public class SubMenu extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				int coin = getCoins();
-				if ((coin - 3000) > 0) {
-					updateCoins(coin - 3000);
+				if ((coin - 1000) > 0) {
+					updateCoins(coin - 1000);
 					WordList wl= null;
 					try {
 						wl = new WordList(_file);

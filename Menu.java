@@ -8,11 +8,15 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.MatteBorder;
+
 import java.awt.Color;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import java.awt.Font;
+
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 
@@ -66,6 +70,11 @@ public class Menu extends JPanel {
 		subTitleLbl.setFont(new Font("Comic Sans MS", Font.PLAIN, 20));
 		subTitleLbl.setBounds(0, 55, 474, 28);
 		this.add(subTitleLbl);
+		
+		JLabel lblSBee = new JLabel("");
+		lblSBee.setIcon(new ImageIcon("sbee2.png"));
+		lblSBee.setBounds(385, 10, 81, 76);
+		this.add(lblSBee);
 
 		JButton quizBtn = new JButton("New Quiz");
 		quizBtn.addActionListener(new ActionListener() {
