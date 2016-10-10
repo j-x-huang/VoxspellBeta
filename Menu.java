@@ -55,7 +55,7 @@ public class Menu extends JPanel {
 
 		createAccuracy();
 
-		//Menu Panel Stuff
+		//Set up menu buttons and labels
 		this.setBackground(new Color(255, 255, 153));
 		this.setLayout(null);
 
@@ -75,7 +75,7 @@ public class Menu extends JPanel {
 		lblSBee.setIcon(new ImageIcon("sbee2.png"));
 		lblSBee.setBounds(385, 10, 81, 76);
 		this.add(lblSBee);
-
+		//Add functionality to quiz button
 		JButton quizBtn = new JButton("New Quiz");
 		quizBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -120,16 +120,31 @@ public class Menu extends JPanel {
 		statsBtn.setFont(new Font("Calibri Light", Font.PLAIN, 20));
 		statsBtn.setBounds(151, 195, 185, 50);
 		this.add(statsBtn);
-
+		//Functionality to clear statistics button
 		JButton clearBtn = new JButton("Clear Statistics");
 		clearBtn.setFont(new Font("Calibri Light", Font.PLAIN, 20));
 		clearBtn.setBounds(151, 270, 185, 50);
+		clearBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+	
+				int clear = JOptionPane.showConfirmDialog (null, "Would You Like to Clear the Statistics?","Warning",JOptionPane.YES_NO_OPTION);
+				if(clear == JOptionPane.YES_OPTION){
+					try {
+						clearStats();
+						createAccuracy();
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
+				}
+			}
+		});
 		this.add(clearBtn);
 
 		lblLevel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblLevel.setBounds(0, 94, 464, 14);
 		this.add(lblLevel);
-
+		//statistics for settings button
 		JButton btnSettings = new JButton("Settings");
 		btnSettings.setFont(new Font("Calibri Light", Font.PLAIN, 20));
 		btnSettings.setBounds(151, 348, 185, 50);
@@ -152,10 +167,9 @@ public class Menu extends JPanel {
 
 
 	public void setTitle(){
-		//label.setText("Welcome to the Spelling Aid Level "+_level+"!!");
 		lblLevel.setText("Level "+_level);
 	}
-
+	//makes table (on a separate panel)
 	protected void makeTable() {
 		ViewAccuracy va = new ViewAccuracy(_wordlist, this);
 
@@ -168,15 +182,26 @@ public class Menu extends JPanel {
 	//This method clears the stats by overwriting existing files that
 	//stores information.
 	protected void clearStats() throws IOException{
+		
+		WordList wl = null;
+		try {
+			wl = new WordList(_file);
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 
-		for (int i = 1; i <= 11; i++) {
-			File accuracy = new File(".accuracy_" + i);
+		int[] levels = wl.getLevels();
+		int size = levels.length;
+
+		for (int i = 0; i < size; i++) {
+			File accuracy = new File(".accuracy_" + levels[i]);
 			accuracy.delete();
 		}
 	}
 
 	//Creates save files to store the accuracy, then add zeros to the file. There is a save 
-	//file for each level
+	//file for each level. This function also creates the save files that keeps track of coins
 	private void createAccuracy() {
 		WordList wl = null;
 		try {
@@ -199,6 +224,7 @@ public class Menu extends JPanel {
 
 					bw.write("0" + "\n");
 					bw.write("0" + "\n");
+					bw.write("0" + "\n");
 
 					bw.close();
 				}
@@ -211,6 +237,7 @@ public class Menu extends JPanel {
 				BufferedWriter bw = new BufferedWriter(fw);
 				
 				bw.write("0" + "\n");
+				bw.close();
 			}
 
 		}catch (IOException e) {

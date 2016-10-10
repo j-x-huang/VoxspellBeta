@@ -24,8 +24,6 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.SwingConstants;
@@ -70,6 +68,7 @@ public class Quiz extends JPanel implements ActionListener {
 	private File _file;
 	private Sound _sound;
 	private Timer _timer;
+	private int _highScore;
 
 	/**
 	 * Create the panel.
@@ -106,7 +105,7 @@ public class Quiz extends JPanel implements ActionListener {
 
 		this.add(lblLevel);
 
-
+		//Setting up GUI features
 		lblPleaseSpellWord.setFont(new Font("Calibri", Font.PLAIN, 18));
 		lblPleaseSpellWord.setBounds(20, 130, 187, 37);
 		this.add(lblPleaseSpellWord);
@@ -167,7 +166,7 @@ public class Quiz extends JPanel implements ActionListener {
 		lblSBee.setBounds(10, 364, 81, 76);
 		this.add(lblSBee);
 
-		lblCorrect.setBounds(133, 268, 110, 41);
+		lblCorrect.setBounds(115, 268, 150, 41);
 		lblCorrect.setHorizontalAlignment(SwingConstants.CENTER);
 		this.add(lblCorrect);
 
@@ -177,9 +176,7 @@ public class Quiz extends JPanel implements ActionListener {
 		this.add(lblSpeech);
 
 
-		//Getting the words and doing the Please Spell Stuff
-
-		//Creating the wordlist using the file name
+		//get the wordcount (of a particular level) rom the WordList class
 
 		_wc = _wordlist.getWordCount(_level);
 
@@ -194,22 +191,21 @@ public class Quiz extends JPanel implements ActionListener {
 			tts="Spell word 1 of "+_maxNum+": ";
 			lblPleaseSpellWord.setText(tts);
 		}
-		lblAcc.setText("Accuracy: 0" +"/"+_testNum);
+		lblAcc.setText("Accuracy: 0" +"/"+_testNum); //set up the accuracy level
 
 		btnListenAgain.addActionListener(this);
 		btnSubmit.addActionListener(this);
 		btnStatistics.addActionListener(this);
 
-		_frame.getRootPane().setDefaultButton(btnSubmit);
+		_frame.getRootPane().setDefaultButton(btnSubmit); //make submit default button
 		//Word to be tested
 		setTestList(_wordlist);
-		festival(_testList.get(_testNo-1));
+		festival("Spell " + _testList.get(_testNo-1));
 	}
 
 	public void actionPerformed(ActionEvent e) {
 		//Getting the word that user wrote
 		String word = textField.getText();
-
 
 		try{
 			//If user pressed speak button,  the word
@@ -219,26 +215,25 @@ public class Quiz extends JPanel implements ActionListener {
 
 				festival(_testList.get(_testNo-1));
 				return;
-				//if spelling is pressed, the alphabet of the word being tested  is spoken
-			}else if (button.equals(btnStatistics)){
+			}else if (button.equals(btnStatistics)){ //makes statistics on a separate panel
 				makeTable();
 				return;
 			}
 			//If user is correct
 			if(_testList.get(_testNo-1).equalsIgnoreCase(word)){
 				//Showing and telling correct message
+				Sound sound = new Sound("cheering.wav");
+				sound.play();
+				
 				lblCorrect.setText("Correct!!");
 
-				//Remove word from failed test list
-				removeFailed(_testList.get(_testNo-1));
-
-
+				//update accuracy and streak
 				_attempts++;
 				_testNo++;
 				_correct++;
 
 				_streak++;
-
+				//get 50 coins if streak > 5, 20 coins if streak > 2
 				if (_streak >5) {
 					_coins+=50;
 					_hiddenCoins+=50;
@@ -252,7 +247,7 @@ public class Quiz extends JPanel implements ActionListener {
 					_hiddenCoins+=10;
 					lblStreak.setText("+10");
 				}
-				blink();
+				blink(); //flash text
 				updateCoins();
 				lblCoin.setText("Coins: "+ _coins);
 
@@ -269,7 +264,7 @@ public class Quiz extends JPanel implements ActionListener {
 				//If second time failing
 				if(incorrect<1){
 					//Setting message to the user about the fault
-					lblCorrect.setText("Incorrect, please try again!!");
+					lblCorrect.setText("Incorrect. Try again");
 					festival("Incorrect!! Spell"+_testList.get(_testNo-1)+".");
 					//Word is spoken again.
 					incorrect++;
@@ -278,17 +273,13 @@ public class Quiz extends JPanel implements ActionListener {
 					//First time failing
 				}else{
 					//Result message to user
-					lblCorrect.setText("Failed!!");
+					lblCorrect.setText("Incorrect");
 
 					//increase test number and fail value
 					_attempts++;
 					_fails++;
 
-					_streak = 0;
-					//Adding failed word to the failed list.
-					failed();
-					failedTotal();
-
+					_streak = 0; // streak resets
 					//Changing field as needed
 
 					_testNo++;
@@ -311,6 +302,11 @@ public class Quiz extends JPanel implements ActionListener {
 				//Telling the user the teset is finished
 				lblCorrect.setText(lblCorrect.getText()+" Quiz Finished!!");
 				festival(lblCorrect.getText());
+				//Update high score
+				if (_correct > _highScore) {
+					_highScore = _correct;
+					updateAccuracy();
+				}
 				//opens options menu where user can choose their next action.
 				SubMenu sub = new SubMenu(_wordlist,_level,_correct,_testNo-1, _frame , _maxNum, _file, _sound);
 				_frame.getContentPane().add(sub);
@@ -394,6 +390,8 @@ public class Quiz extends JPanel implements ActionListener {
 			_attempts = Integer.parseInt(str);
 			str = br.readLine();
 			_fails = Integer.parseInt(str);
+			str = br.readLine();
+			_highScore = Integer.parseInt(str);
 
 		}
 	}
@@ -441,9 +439,10 @@ public class Quiz extends JPanel implements ActionListener {
 
 		bw.write(_attempts + "\n");
 		bw.write(_fails + "\n");
+		bw.write(_highScore + "\n");
 		bw.close();
 	}
-
+	/*
 	//Putting Failed word into failed list
 	private void failed() throws IOException{
 		File failed = new File(".failed"+_level);
@@ -510,6 +509,7 @@ public class Quiz extends JPanel implements ActionListener {
 		output.append(_testList.get(_testNo-1)+"\n");
 		output.close();
 	}
+	*/
 
 	private void makeTable() {
 		ViewAccuracy va = new ViewAccuracy(_wordlist, this);

@@ -1,6 +1,8 @@
 package beta;
 
 import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -23,16 +25,18 @@ public class ViewAccuracy extends JPanel{
 
 	private ArrayList<Integer> attemptsList = new ArrayList<Integer>();
 	private ArrayList<Integer> failsList = new ArrayList<Integer>();
+	private ArrayList<Integer> scoreList = new ArrayList<Integer>();
 	private ArrayList<Double> accuracyList = new ArrayList<Double>();
 
 
-	private final String[] COLUMN_HEADERS = {"Level", "Accuracy", "Fails","Attempts" };
-	private final Class<?> _colClasses[] = {String.class, String.class, Integer.class, Integer.class};
+	private final String[] COLUMN_HEADERS = {"Level", "Accuracy", "Successes","Attempts","High Score" };
+	private final Class<?> _colClasses[] = {String.class, String.class, Integer.class,Integer.class, Integer.class};
 
 	private int _size;
 	private int[] _levels;
 	private JPanel returnPanel;
 	private int _coins;
+
 
 	public ViewAccuracy(WordList wordlist, JPanel panel) {
 		returnPanel = panel;
@@ -60,7 +64,12 @@ public class ViewAccuracy extends JPanel{
 		getCoins();
 		JLabel coinLbl = new JLabel("Coins: " + _coins);
 		coinLbl.setHorizontalAlignment(SwingConstants.TRAILING);
-		this.add(coinLbl, BorderLayout.NORTH);
+		JLabel titleLbl = new JLabel("Wordlist: " + wordlist.getFileName());
+		titleLbl.setHorizontalAlignment(SwingConstants.LEADING);
+		JPanel topPanel = new JPanel(new GridLayout(1,2));
+		topPanel.add(titleLbl);
+		topPanel.add(coinLbl);
+		this.add(topPanel, BorderLayout.NORTH);
 	}
 	
 	private void getCoins() {
@@ -74,7 +83,6 @@ public class ViewAccuracy extends JPanel{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
 	}
 
 	class StatsTable extends AbstractTableModel {
@@ -90,6 +98,8 @@ public class ViewAccuracy extends JPanel{
 					attemptsList.add(Integer.parseInt(str));
 					str = br.readLine();
 					failsList.add(Integer.parseInt(str));
+					str = br.readLine();
+					scoreList.add(Integer.parseInt(str));
 					br.close();
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -120,22 +130,24 @@ public class ViewAccuracy extends JPanel{
 		@Override
 		public int getColumnCount() {
 			// TODO Auto-generated method stub
-			return 4;
+			return 5;
 
 		}
 		//Add values from the arraylists into the table
 		@Override
 		public Object getValueAt(int rowIndex, int columnIndex) {
-			// TODO Auto-generated method stub
 			if (columnIndex == 0) {
 				return "Level " + _levels[rowIndex];
 			} else if (columnIndex == 1) {
 				return accuracyList.get(rowIndex) + "%";
 			} else if (columnIndex == 2) {
-				return failsList.get(rowIndex);
-
+				int correct = attemptsList.get(rowIndex) - failsList.get(rowIndex);
+				return correct;
 			} else if (columnIndex == 3) {
 				return attemptsList.get(rowIndex);
+
+			} else if (columnIndex == 4) {
+				return scoreList.get(rowIndex);
 			}
 			return null;
 		}

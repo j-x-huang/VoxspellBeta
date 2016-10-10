@@ -18,7 +18,7 @@ public class Sound {
 			clip.open(ais);
 			FloatControl gainControl = 
 					(FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-			gainControl.setValue(-7.0f);
+			gainControl.setValue(-15.0f);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -27,6 +27,24 @@ public class Sound {
 	public void stop(){
 		if(clip == null) return;
 		clip.stop();
+	}
+	
+	public void play() {
+		try {
+			if (clip != null) {
+				new Thread() {
+					public void run() {
+						synchronized (clip) {
+							clip.stop();
+							clip.setFramePosition(0);
+							clip.start();
+						}
+					}
+				}.start();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void loop() {

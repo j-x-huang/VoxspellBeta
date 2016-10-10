@@ -22,10 +22,11 @@ public class WordList {
 	private int[] pos = new int[11];
 	private int _level;
 	private boolean _failed = false;
+	private File _file;
 	
 	//This constructor is for normal quiz.
 	public WordList(File file) throws IOException{
-		
+			_file = file;
 			BufferedReader wordlist = new BufferedReader(new FileReader(file));
 			
 			String line;
@@ -146,6 +147,10 @@ public class WordList {
 		} else {
 			return _levelArray.get(index + 1);
 		}
+	}
+	
+	public String getFileName() {
+		return _file.getName();
 	}
 	
 }

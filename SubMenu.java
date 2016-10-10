@@ -70,7 +70,7 @@ public class SubMenu extends JPanel {
 		lblNewLabel.setBounds(10, 120, 454, 28);
 		this.add(lblNewLabel);
 
-		double percentage = ((double) correct * 100 )/ (double) maxNum;
+		double percentage = ((double) correct * 100 )/ (double) testNum;
 
 		JLabel lblWellDone = new JLabel();
 		if (percentage >= 90) {
