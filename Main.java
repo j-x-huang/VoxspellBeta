@@ -25,6 +25,7 @@ public class Main extends JFrame{
 	private Sound sound;
 
 	public Main() {
+		//Set up frame
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 500, 500);
 		setResizable(false);
@@ -33,7 +34,7 @@ public class Main extends JFrame{
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(new CardLayout(0, 0));
-
+		//get current wordlist file and make a wordlist 
 		try {
 			File file = new File(".defaultList.txt");
 			FileReader fr = new FileReader(file);
@@ -47,7 +48,7 @@ public class Main extends JFrame{
 		}
 		_level = levelSelect();
 		
-		Sound sound = new Sound("bensound-acousticbreeze.wav");
+		Sound sound = new Sound("bensound-acousticbreeze.wav"); //play background music
 		sound.loop();
 		Menu menu = new Menu(_level, this, _wl, 10, _mainFile, sound);
 		contentPane.add(menu);
@@ -68,9 +69,9 @@ public class Main extends JFrame{
 	}
 
 
-
+	//A level select dialog which pops up at start of application.
 	private int levelSelect() {
-		int[] levels = _wl.getLevels();
+		int[] levels = _wl.getLevels(); //Get the level numbers
 		String[] levelStrings=Arrays.toString(levels).split("[\\[\\]]")[1].split(", "); 
 
 		String num = (String) JOptionPane.showInputDialog(this, "Please select a level", "Level Select", 
@@ -78,7 +79,7 @@ public class Main extends JFrame{
 
 
 		if(num==null){
-			return 0;
+			return 1; //if user cancels option just return to level 1
 		}else{
 			return Integer.parseInt(num);
 		} 

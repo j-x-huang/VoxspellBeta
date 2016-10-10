@@ -66,7 +66,8 @@ public class MediaPlayer {
 
 		});
 		
-		JPanel btnPanel = new JPanel();
+		JPanel btnPanel = new JPanel(); //make panel to host all the control buttons
+		//make skip button
 		JButton btnSkip = new JButton(">>");
         btnSkip.addActionListener(new ActionListener() {
 			@Override
@@ -74,7 +75,7 @@ public class MediaPlayer {
 				video.skip(5000);
 			}
 		});
-        
+        //make skipback button
         JButton btnSkipBack = new JButton("<<");
         btnSkipBack.addActionListener(new ActionListener() {
 			@Override
@@ -88,7 +89,8 @@ public class MediaPlayer {
         btnPanel.add(btnSkip);
         
         secondPanel.add(btnPanel);
-		//Progress Bar shows how long the video has been playing
+		//Progress Bar shows how long the video has been playing.
+        //The timer's actionlistener updates the progress bar
 		Timer timer = new Timer(500, new ActionListener() {
 
 			@Override

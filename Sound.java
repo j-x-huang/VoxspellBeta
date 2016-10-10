@@ -10,7 +10,7 @@ import javax.sound.sampled.FloatControl;
 public class Sound {
 
 	private Clip clip;
-
+	//Get the sound file and creates clip.
 	public Sound (String fileName) {
 		try {
 			AudioInputStream ais = AudioSystem.getAudioInputStream(new File(fileName));
@@ -23,12 +23,12 @@ public class Sound {
 			e.printStackTrace();
 		}
 	}
-
+	//stop clip
 	public void stop(){
 		if(clip == null) return;
 		clip.stop();
 	}
-	
+	//method to play audio file once
 	public void play() {
 		try {
 			if (clip != null) {
@@ -46,7 +46,7 @@ public class Sound {
 			e.printStackTrace();
 		}
 	}
-
+	//method to play audio file continuously
 	public void loop() {
 		try {
 			if (clip != null) {
@@ -64,6 +64,7 @@ public class Sound {
 			e.printStackTrace();
 		}
 	}
+	//check if clip is still playing
 	public boolean isActive(){
 		return clip.isActive();
 	}

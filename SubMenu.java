@@ -54,6 +54,7 @@ public class SubMenu extends JPanel {
 		_file = file;
 		_sound = sound;
 
+		//Set up the GUI
 		this.setBackground(new Color(255, 255, 102));
 		this.setLayout(null);
 
@@ -64,7 +65,7 @@ public class SubMenu extends JPanel {
 		this.add(lblQuizFinished);
 
 
-		JLabel lblNewLabel = new JLabel("You scored: " + correct + "/" + testNum);
+		JLabel lblNewLabel = new JLabel("You scored: " + correct + "/" + testNum); //display results of the quiz
 		lblNewLabel.setFont(new Font("Calibri Light", Font.PLAIN, 16));
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setBounds(10, 120, 454, 28);
@@ -72,6 +73,8 @@ public class SubMenu extends JPanel {
 
 		double percentage = ((double) correct * 100 )/ (double) testNum;
 
+		//Label changes depending on users score. If user gets at least 90% they get a different message and the 
+		// ability to progress to the next next and/or watch the video reward
 		JLabel lblWellDone = new JLabel();
 		if (percentage >= 90) {
 			lblWellDone.setText("Well Done! You can progress to the next level.");
@@ -85,6 +88,7 @@ public class SubMenu extends JPanel {
 		lblWellDone.setBounds(20, 141, 444, 28);
 		this.add(lblWellDone);
 
+		//This button lets users go back to the menu for the same level as before
 		btnReturnToMenu.setBounds(170, 232, 145, 35);
 		btnReturnToMenu.addActionListener(new ActionListener() {
 
@@ -97,7 +101,7 @@ public class SubMenu extends JPanel {
 			}
 		});
 		this.add(btnReturnToMenu);
-
+		//this button lets users repeat quiz
 		btnRepeatQuiz.setBounds(170, 278, 145, 35);
 		btnRepeatQuiz.addActionListener(new ActionListener() {
 
@@ -116,7 +120,8 @@ public class SubMenu extends JPanel {
 
 		});
 		this.add(btnRepeatQuiz);
-
+		
+		//Makes statistics panel visible
 		btnViewStatistics.setBounds(170, 324, 145, 35);
 		btnViewStatistics.addActionListener(new ActionListener() {
 
@@ -128,7 +133,9 @@ public class SubMenu extends JPanel {
 
 		});
 		this.add(btnViewStatistics);
-
+		
+		//This button only appears if users scored at least 90%
+		//makes the video player
 		btnWatchVideo.setBounds(170, 370, 145, 35);
 		btnWatchVideo.addActionListener(new ActionListener() {
 
@@ -139,7 +146,9 @@ public class SubMenu extends JPanel {
 			}
 
 		});
-
+		
+		//This button only appears if users scored at least 90%
+		//allows users to do quizzes at the next level (if possible)
 		btnAdvance.setBounds(170, 190, 145, 35);
 		btnAdvance.addActionListener(new ActionListener() {
 
@@ -160,7 +169,9 @@ public class SubMenu extends JPanel {
 			}
 
 		});
-
+		//This button allows users to purchase using the coins the next level
+		// so they can start doing quizzes at a higher level. Only appears if
+		// user scored <90%
 		btnCoins .setBounds(170, 190, 145, 35);
 		btnCoins.addActionListener(new ActionListener() {
 			@Override
@@ -194,7 +205,7 @@ public class SubMenu extends JPanel {
 			this.add(btnCoins);
 		}
 	}
-
+	//makes table panel visible
 	private void makeTable() {
 		ViewAccuracy va = new ViewAccuracy(_wordList, this);
 
@@ -202,7 +213,7 @@ public class SubMenu extends JPanel {
 		this.setVisible(false);
 		va.setVisible(true);
 	}
-
+	//get the number of coins user has 
 	private int getCoins(){
 
 		int coin = 0;
@@ -219,7 +230,8 @@ public class SubMenu extends JPanel {
 
 		return coin;
 	}
-
+	//updates the number of coins users have and saves it on a file
+	// (only if user decides to purchase a level)
 	private void updateCoins(int coin) {
 		File file = new File(".coinSave");
 

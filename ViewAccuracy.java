@@ -42,14 +42,15 @@ public class ViewAccuracy extends JPanel{
 		returnPanel = panel;
 		WordList wl = wordlist;
 
-		_levels = wl.getLevels();
+		_levels = wl.getLevels(); //get the number of levels in the wordlist
 		_size = _levels.length;
-
+		
+		//creates the JTable and adds to panel
 		StatsTable st = new StatsTable();
 		JTable table = new JTable(st);
 		this.setLayout(new BorderLayout());
-		JButton returnBtn = new JButton("Return");
-		returnBtn.addActionListener(new ActionListener() {
+		JButton returnBtn = new JButton("Return"); ///make return button
+		returnBtn.addActionListener(new ActionListener() { //return button makes the panel invisible
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -62,16 +63,16 @@ public class ViewAccuracy extends JPanel{
 		this.add(new JScrollPane(table), BorderLayout.CENTER);
 		this.add(returnBtn, BorderLayout.SOUTH);
 		getCoins();
-		JLabel coinLbl = new JLabel("Coins: " + _coins);
+		JLabel coinLbl = new JLabel("Coins: " + _coins);	//Show the coin value in a label
 		coinLbl.setHorizontalAlignment(SwingConstants.TRAILING);
-		JLabel titleLbl = new JLabel("Wordlist: " + wordlist.getFileName());
+		JLabel titleLbl = new JLabel("Wordlist: " + wordlist.getFileName()); //Show name of wordlist in a label
 		titleLbl.setHorizontalAlignment(SwingConstants.LEADING);
 		JPanel topPanel = new JPanel(new GridLayout(1,2));
 		topPanel.add(titleLbl);
 		topPanel.add(coinLbl);
 		this.add(topPanel, BorderLayout.NORTH);
 	}
-	
+	//reads the coin value from save file and adds it to the coins field
 	private void getCoins() {
 		try {
 		File file = new File(".coinSave");
@@ -123,13 +124,11 @@ public class ViewAccuracy extends JPanel{
 
 		@Override
 		public int getRowCount() {
-			// TODO Auto-generated method stub
 			return _size;
 		}
 
 		@Override
 		public int getColumnCount() {
-			// TODO Auto-generated method stub
 			return 5;
 
 		}

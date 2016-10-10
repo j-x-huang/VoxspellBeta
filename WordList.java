@@ -36,8 +36,8 @@ public class WordList {
 				if(!"".equals(line.trim())){
 					String[] lines = line.split(" ");
 					if(lines[0].equals("%Level")){
-						_level = Integer.parseInt(lines[1]);
-					} else if (line.equals("0")){
+						_level = Integer.parseInt(lines[1]); //use level as key for the hashtable
+					} else if (line.equals("0")){ //stop if it sees a sero
 						break;
 					} else {
 						if (_levelMap.containsKey(_level)) {
@@ -126,7 +126,7 @@ public class WordList {
 		testList.addAll(list);
 		return testList;
 	}
-	
+	//get the levels in the wordlist as an array of integers
 	public int[] getLevels() {
 		int size = _levelArray.size();
 		int[] array = new int[size];
@@ -138,7 +138,7 @@ public class WordList {
 		return array;
 		
 	}
-	
+	//get if the level after a certain level (if possible)
 	public int getNextLevel(int level) {
 		int index = _levelArray.indexOf(level);
 		
@@ -148,7 +148,7 @@ public class WordList {
 			return _levelArray.get(index + 1);
 		}
 	}
-	
+	//get filename of wordlist
 	public String getFileName() {
 		return _file.getName();
 	}

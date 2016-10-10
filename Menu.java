@@ -43,7 +43,7 @@ public class Menu extends JPanel {
 	private Sound _sound;
 
 	/**
-	 * Create the frame.
+	 * This is a menu panel of the quiz
 	 */
 	public Menu(int level, JFrame frame, WordList wordlist, int wordNum, File file, Sound sound) {
 		_frame = frame;
@@ -229,7 +229,7 @@ public class Menu extends JPanel {
 					bw.close();
 				}
 			} 
-			File coin = new File(".coinSave");
+			File coin = new File(".coinSave"); //make a save file to save coin value
 			if (! coin.exists()) {
 				coin.createNewFile();
 				

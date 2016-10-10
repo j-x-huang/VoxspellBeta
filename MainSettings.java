@@ -34,7 +34,7 @@ import javax.swing.JFileChooser;
 public class MainSettings extends JPanel {
 
 	private JPanel contentPane;
-	private JLabel label_4 = new JLabel();
+	private JLabel lblCurrentFile = new JLabel();
 	private File _file;
 	private File _oldFile;
 	private int _maxNum;
@@ -58,26 +58,27 @@ public class MainSettings extends JPanel {
 		_oldMenu = menu;
 		_sound = sound;
 
-		label_4.setText(file.getName());
+		lblCurrentFile.setText(file.getName()); //get current wordlist file name
 
+		//set up buttons and labels
 		this.setLayout(null);
 		this.setBackground(new Color(255, 255, 153));
 		
-		JLabel label = new JLabel("Settings");
-		label.setHorizontalAlignment(SwingConstants.CENTER);
-		label.setFont(new Font("Calibri Light", Font.PLAIN, 25));
-		label.setBounds(10, 11, 454, 30);
-		this.add(label);
+		JLabel lblTile = new JLabel("Settings");
+		lblTile.setHorizontalAlignment(SwingConstants.CENTER);
+		lblTile.setFont(new Font("Calibri Light", Font.PLAIN, 25));
+		lblTile.setBounds(10, 11, 454, 30);
+		this.add(lblTile);
 
-		JLabel label_1 = new JLabel("Stop Music");
-		label_1.setFont(new Font("Calibri", Font.PLAIN, 15));
-		label_1.setBounds(59, 84, 130, 24);
-		this.add(label_1);
+		JLabel lblStopMusic = new JLabel("Stop Music");
+		lblStopMusic.setFont(new Font("Calibri", Font.PLAIN, 15));
+		lblStopMusic.setBounds(59, 84, 130, 24);
+		this.add(lblStopMusic);
 
 		JToggleButton toggleButton = new JToggleButton("");
 		toggleButton.setIcon(new ImageIcon("mute2.png"));
 		toggleButton.setBounds(285, 68, 57, 40);
-		toggleButton.addItemListener(new ItemListener() {
+		toggleButton.addItemListener(new ItemListener() { //This button stops or plays background music 
 
 			@Override
 			public void itemStateChanged(ItemEvent ev) {
@@ -91,32 +92,32 @@ public class MainSettings extends JPanel {
 		});
 		this.add(toggleButton);
 
-		JLabel label_2 = new JLabel("Number of words tested");
-		label_2.setFont(new Font("Calibri Light", Font.PLAIN, 15));
-		label_2.setBounds(59, 156, 200, 14);
-		this.add(label_2);
+		JLabel lblMaxNum = new JLabel("Number of words tested");
+		lblMaxNum.setFont(new Font("Calibri Light", Font.PLAIN, 15));
+		lblMaxNum.setBounds(59, 156, 200, 14);
+		this.add(lblMaxNum);
 
-		spinner.setModel(new SpinnerNumberModel(maxNum, 5, 20, 1));
+		spinner.setModel(new SpinnerNumberModel(maxNum, 5, 20, 1)); //A spinner to select the max number of words tested. min is 5, max is 20
 		spinner.setBounds(285, 153, 57, 20);
 		this.add(spinner);
 
 
-		JLabel label_3 = new JLabel("Current spelling list:");
-		label_3.setFont(new Font("Calibri Light", Font.PLAIN, 15));
-		label_3.setBounds(59, 213, 200, 22);
-		this.add(label_3);
+		JLabel lblCurrentList = new JLabel("Current spelling list:");
+		lblCurrentList.setFont(new Font("Calibri Light", Font.PLAIN, 15));
+		lblCurrentList.setBounds(59, 213, 200, 22);
+		this.add(lblCurrentList);
 
-		label_4.setFont(new Font("Calibri Light", Font.PLAIN, 15));
-		label_4.setBounds(285, 213, 200, 22);
-		//---------------------------------------------------
+		lblCurrentFile.setFont(new Font("Calibri Light", Font.PLAIN, 15));
+		lblCurrentFile.setBounds(285, 213, 200, 22);
+		//File choose allows users to select their own lists
 		final JFileChooser fc = new JFileChooser();
 
-		JButton button = new JButton("Select Spelling List");
-		button.setBounds(285, 250, 170, 23);
-		button.addActionListener(new ActionListener() {
+		JButton btnSelectList = new JButton("Select Spelling List"); //pressing this button opens up file chooser
+		btnSelectList.setBounds(285, 250, 170, 23);
+		btnSelectList.addActionListener(new ActionListener() {
 
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent e) { //warning message pop if users want to change list
 				int val = JOptionPane.showConfirmDialog(null, "Warning. Changing spellings lists will clear your save files and progress. Do you wish "
 						+ "to continue", "alert", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
 				if (val == JOptionPane.OK_OPTION) {
@@ -125,36 +126,36 @@ public class MainSettings extends JPanel {
 					if (returnVal == JFileChooser.APPROVE_OPTION) {
 						_file = fc.getSelectedFile();
 
-						label_4.setText(_file.getName());
+						lblCurrentFile.setText(_file.getName()); //get file name that the user has selected
 					}
 				}
 			}
 		});
-		this.add(label_4);
-		this.add(button);
+		this.add(lblCurrentFile);
+		this.add(btnSelectList);
 
-		JButton button_1 = new JButton("Ok");
-		button_1.setBounds(375, 417, 89, 23);
-		button_1.addActionListener(new ActionListener() {
+		JButton btnOk = new JButton("Ok"); //ok button confirms users file selection
+		btnOk.setBounds(375, 417, 89, 23);
+		btnOk.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				File file = _file;
 				int spinnerVal = (int) spinner.getValue();
 				try {
-					_wl = new WordList(file);
+					_wl = new WordList(file); //make a wordlist from the file
 
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
-				if (! file.equals(_oldFile)) { 
-					_level = levelSelect();
+				if (! file.equals(_oldFile)) { //if new file selected is not the same as the previous
+					_level = levelSelect();    //choose a level (for new wordlist)
 					if (_level != 0) {
 						try {
-							_oldMenu.clearStats();
+							_oldMenu.clearStats(); //clears old stats
 
-							File listFile = new File(".defaultList.txt");
-							PrintWriter pw = new PrintWriter(listFile);
+							File listFile = new File(".defaultList.txt"); //change default spelling list save. So that if user boots up spelling list
+							PrintWriter pw = new PrintWriter(listFile);   //the same one which he chose opens up
 							pw.close();
 
 							FileWriter fw = new FileWriter(listFile);
@@ -168,7 +169,7 @@ public class MainSettings extends JPanel {
 						}
 					}
 				}
-				Menu menu = new Menu(_level, _frame, _wl, spinnerVal, file, _sound);
+				Menu menu = new Menu(_level, _frame, _wl, spinnerVal, file, _sound); //make new menu
 				_frame.getContentPane().add(menu);
 				setVisible(false);
 				menu.setVisible(true);
@@ -176,11 +177,11 @@ public class MainSettings extends JPanel {
 
 
 		});
-		this.add(button_1);
+		this.add(btnOk);
 
-		JButton button_2 = new JButton("Cancel");
-		button_2.setBounds(268, 417, 89, 23);
-		button_2.addActionListener(new ActionListener() {
+		JButton btnCancel = new JButton("Cancel");
+		btnCancel.setBounds(268, 417, 89, 23);
+		btnCancel.addActionListener(new ActionListener() { //returns users back to menu with the level and maxNum as before
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -196,10 +197,10 @@ public class MainSettings extends JPanel {
 				menu.setVisible(true);
 			}
 		});
-		this.add(button_2);
+		this.add(btnCancel);
 	}
 
-
+	//A level selection dialog box. Pops up only if users choose a new wordlist
 	private int levelSelect() {
 
 

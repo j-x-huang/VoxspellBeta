@@ -222,7 +222,7 @@ public class Quiz extends JPanel implements ActionListener {
 			//If user is correct
 			if(_testList.get(_testNo-1).equalsIgnoreCase(word)){
 				//Showing and telling correct message
-				Sound sound = new Sound("cheering.wav");
+				Sound sound = new Sound("cheering.wav"); //plays a cheering sound
 				sound.play();
 				
 				lblCorrect.setText("Correct!!");
@@ -247,7 +247,7 @@ public class Quiz extends JPanel implements ActionListener {
 					_hiddenCoins+=10;
 					lblStreak.setText("+10");
 				}
-				blink(); //flash text
+				blink(); //flash 'Streak' label text
 				updateCoins();
 				lblCoin.setText("Coins: "+ _coins);
 
@@ -370,7 +370,8 @@ public class Quiz extends JPanel implements ActionListener {
 		_testWord = wordlist.getRandomWord(1);	
 	}
 	 */
-
+	
+	//method makes the list of words to be tested 
 	private void setTestList(WordList wordlist) throws IOException{
 		_testList = wordlist.createTestList(_level,_maxNum);	
 	}
@@ -395,6 +396,8 @@ public class Quiz extends JPanel implements ActionListener {
 
 		}
 	}
+	
+	//obtains the number of coins the user has from the save file
 	private void getCoins() throws IOException{
 		File file = new File(".coinSave");
 		if (! file.exists()) {
@@ -407,7 +410,7 @@ public class Quiz extends JPanel implements ActionListener {
 			_hiddenCoins = Integer.parseInt(str);
 		}
 	}
-
+	//Writes the value from the hiddenCoin filed to the coin save file
 	private void updateCoins() {
 		File file = new File(".coinSave");
 
@@ -511,6 +514,7 @@ public class Quiz extends JPanel implements ActionListener {
 	}
 	*/
 
+	//makes statistics table visible
 	private void makeTable() {
 		ViewAccuracy va = new ViewAccuracy(_wordlist, this);
 
@@ -518,7 +522,8 @@ public class Quiz extends JPanel implements ActionListener {
 		this.setVisible(false);
 		va.setVisible(true);
 	}
-
+	
+	//makes the streak label flash several times
 	private void blink() {
 
 		_timer = new Timer(50, new TimerListener());
@@ -526,7 +531,8 @@ public class Quiz extends JPanel implements ActionListener {
 
 
 	}
-
+	// this is an action listener for the timer. Flashes should stop
+	// after 18 'flashes'
 	public class TimerListener implements ActionListener {
 		int count = 0;
 		@Override
@@ -545,6 +551,13 @@ public class Quiz extends JPanel implements ActionListener {
 			
 		}
 	}
+	
+	/**
+	 * The class implements a mini settings dialog box
+	 * It allows the user to control the background music as well
+	 * as the ability to change the voice
+	 *
+	 */
 	public class Settings extends JFrame {
 
 		private JPanel contentPane;
@@ -553,8 +566,10 @@ public class Quiz extends JPanel implements ActionListener {
 		 * Create the frame.
 		 */
 		public Settings() {
+			//set up the GUI
 			setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 			setBounds(100, 100, 410, 200);
+			setResizable(false);
 			contentPane = new JPanel();
 			contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 			setContentPane(contentPane);
@@ -564,7 +579,7 @@ public class Quiz extends JPanel implements ActionListener {
 			lblChangeVoice.setBounds(10, 99, 135, 24);
 			contentPane.add(lblChangeVoice);
 
-			String[] voices = _voices.toArray(new String[_voices.size()]);
+			String[] voices = _voices.toArray(new String[_voices.size()]); //get the list of voices installed on users computer
 
 			final JComboBox<String> comboBox = new JComboBox<String>(voices);
 			comboBox.setBounds(182, 101, 196, 20);
@@ -579,7 +594,8 @@ public class Quiz extends JPanel implements ActionListener {
 			JLabel lblMute = new JLabel("Stop Music");
 			lblMute.setBounds(10, 74, 135, 20);
 			contentPane.add(lblMute);
-
+			
+			//This buttons stops and starts background music
 			JToggleButton toggleButton = new JToggleButton("");
 			toggleButton.setIcon(new ImageIcon("mute2.png"));
 			toggleButton.setBounds(182, 50, 57, 40);
@@ -597,6 +613,7 @@ public class Quiz extends JPanel implements ActionListener {
 			});
 			contentPane.add(toggleButton);
 
+			//Upon pressing the ok button. The voice is changed.
 			JButton btnOK = new JButton("Ok");
 			btnOK.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
