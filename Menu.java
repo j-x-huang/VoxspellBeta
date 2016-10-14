@@ -11,6 +11,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
 
 import java.awt.Color;
+import java.awt.Cursor;
+
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
@@ -62,18 +64,18 @@ public class Menu extends JPanel {
 		JLabel titleLbl = new JLabel("Voxspell");
 		titleLbl.setHorizontalAlignment(SwingConstants.CENTER);
 		titleLbl.setFont(new Font("Comic Sans MS", Font.PLAIN, 40));
-		titleLbl.setBounds(0, 0, 474, 57);
+		titleLbl.setBounds(0,11, 850, 57);
 		this.add(titleLbl);
 
 		JLabel subTitleLbl = new JLabel("Spelling Aid. Level: " + _level);
 		subTitleLbl.setHorizontalAlignment(SwingConstants.CENTER);
 		subTitleLbl.setFont(new Font("Comic Sans MS", Font.PLAIN, 20));
-		subTitleLbl.setBounds(0, 55, 474, 28);
+		subTitleLbl.setBounds(0, 65, 850, 28);
 		this.add(subTitleLbl);
 		
 		JLabel lblSBee = new JLabel("");
 		lblSBee.setIcon(new ImageIcon("sbee2.png"));
-		lblSBee.setBounds(385, 10, 81, 76);
+		lblSBee.setBounds(650, 10, 81, 76);
 		this.add(lblSBee);
 		//Add functionality to quiz button
 		JButton quizBtn = new JButton("New Quiz");
@@ -107,8 +109,12 @@ public class Menu extends JPanel {
 
 			}
 		});
-		quizBtn.setFont(new Font("Calibri Light", Font.PLAIN, 20));
-		quizBtn.setBounds(151, 121, 185, 50);
+		quizBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		quizBtn.setFont(new Font("Arial Black", Font.PLAIN, 20));
+		quizBtn.setBorder(new MatteBorder(3,3,3,3, new Color(0,0,0)));
+		quizBtn.setBounds(313, 147, 220, 69);
+		quizBtn.setBackground(new Color(255,153, 51));
+		quizBtn.setForeground(new Color(255,255, 153));
 		this.add(quizBtn);
 
 		JButton statsBtn = new JButton("View Statistics");
@@ -117,13 +123,16 @@ public class Menu extends JPanel {
 				makeTable();
 			}
 		});
-		statsBtn.setFont(new Font("Calibri Light", Font.PLAIN, 20));
-		statsBtn.setBounds(151, 195, 185, 50);
+		statsBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		statsBtn.setFont(new Font("Arial Black", Font.PLAIN, 20));
+		statsBtn.setBorder(new MatteBorder(3,3,3,3, new Color(0,0,0)));
+		statsBtn.setBounds(313, 247, 220, 69);
+		statsBtn.setBackground(new Color(255,153, 51));
+		statsBtn.setForeground(new Color(255,255, 153));
+		
 		this.add(statsBtn);
 		//Functionality to clear statistics button
 		JButton clearBtn = new JButton("Clear Statistics");
-		clearBtn.setFont(new Font("Calibri Light", Font.PLAIN, 20));
-		clearBtn.setBounds(151, 270, 185, 50);
 		clearBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -139,16 +148,21 @@ public class Menu extends JPanel {
 				}
 			}
 		});
+		clearBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		clearBtn.setFont(new Font("Arial Black", Font.PLAIN, 20));
+		clearBtn.setBorder(new MatteBorder(3,3,3,3, new Color(0,0,0)));
+		clearBtn.setBounds(313, 347, 220, 69);
+		clearBtn.setBackground(new Color(255,153, 51));
+		clearBtn.setForeground(new Color(255,255, 153));
 		this.add(clearBtn);
 
 		lblLevel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblLevel.setBounds(0, 94, 464, 14);
 		this.add(lblLevel);
+		
 		//statistics for settings button
-		JButton btnSettings = new JButton("Settings");
-		btnSettings.setFont(new Font("Calibri Light", Font.PLAIN, 20));
-		btnSettings.setBounds(151, 348, 185, 50);
-		btnSettings.addActionListener(new ActionListener() {
+		JButton settingsBtn = new JButton("Settings");
+		settingsBtn.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -159,7 +173,13 @@ public class Menu extends JPanel {
 			}
 
 		});
-		this.add(btnSettings);
+		settingsBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		settingsBtn.setFont(new Font("Arial Black", Font.PLAIN, 20));
+		settingsBtn.setBorder(new MatteBorder(3,3,3,3, new Color(0,0,0)));
+		settingsBtn.setBounds(313, 447, 220, 69);
+		settingsBtn.setBackground(new Color(255,153, 51));
+		settingsBtn.setForeground(new Color(255,255, 153));
+		this.add(settingsBtn);
 
 
 	}

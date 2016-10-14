@@ -7,6 +7,7 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.MatteBorder;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
@@ -66,18 +67,18 @@ public class MainSettings extends JPanel {
 		
 		JLabel lblTile = new JLabel("Settings");
 		lblTile.setHorizontalAlignment(SwingConstants.CENTER);
-		lblTile.setFont(new Font("Calibri Light", Font.PLAIN, 25));
-		lblTile.setBounds(10, 11, 454, 30);
+		lblTile.setFont(new Font("Calibri Light", Font.PLAIN, 35));
+		lblTile.setBounds(10, 11, 850, 40);
 		this.add(lblTile);
 
 		JLabel lblStopMusic = new JLabel("Stop Music");
-		lblStopMusic.setFont(new Font("Calibri", Font.PLAIN, 15));
-		lblStopMusic.setBounds(59, 84, 130, 24);
+		lblStopMusic.setFont(new Font("Arial", Font.PLAIN, 24));
+		lblStopMusic.setBounds(257, 90, 150, 30);
 		this.add(lblStopMusic);
 
 		JToggleButton toggleButton = new JToggleButton("");
 		toggleButton.setIcon(new ImageIcon("mute2.png"));
-		toggleButton.setBounds(285, 68, 57, 40);
+		toggleButton.setBounds(500, 84, 57, 40);
 		toggleButton.addItemListener(new ItemListener() { //This button stops or plays background music 
 
 			@Override
@@ -93,27 +94,30 @@ public class MainSettings extends JPanel {
 		this.add(toggleButton);
 
 		JLabel lblMaxNum = new JLabel("Number of words tested");
-		lblMaxNum.setFont(new Font("Calibri Light", Font.PLAIN, 15));
-		lblMaxNum.setBounds(59, 156, 200, 14);
+		lblMaxNum.setFont(new Font("Arial", Font.PLAIN, 24));
+		lblMaxNum.setBounds(100, 170, 300, 30);
 		this.add(lblMaxNum);
 
 		spinner.setModel(new SpinnerNumberModel(maxNum, 5, 20, 1)); //A spinner to select the max number of words tested. min is 5, max is 20
-		spinner.setBounds(285, 153, 57, 20);
+		spinner.setBounds(500, 170, 57, 30);
 		this.add(spinner);
 
 
 		JLabel lblCurrentList = new JLabel("Current spelling list:");
-		lblCurrentList.setFont(new Font("Calibri Light", Font.PLAIN, 15));
-		lblCurrentList.setBounds(59, 213, 200, 22);
+		lblCurrentList.setFont(new Font("Arial", Font.PLAIN, 24));
+		lblCurrentList.setBounds(150, 256, 300, 30);
 		this.add(lblCurrentList);
 
-		lblCurrentFile.setFont(new Font("Calibri Light", Font.PLAIN, 15));
-		lblCurrentFile.setBounds(285, 213, 200, 22);
+		lblCurrentFile.setFont(new Font("Arial", Font.PLAIN, 24));
+		lblCurrentFile.setBounds(500, 256, 230, 22);
 		//File choose allows users to select their own lists
 		final JFileChooser fc = new JFileChooser();
 
 		JButton btnSelectList = new JButton("Select Spelling List"); //pressing this button opens up file chooser
-		btnSelectList.setBounds(285, 250, 170, 23);
+		btnSelectList.setFont(new Font("Arial", Font.PLAIN, 18));
+		btnSelectList.setBounds(500, 300, 210, 30);
+		btnSelectList.setBackground(new Color(255,153, 51));
+		btnSelectList.setForeground(new Color(255,255, 153));
 		btnSelectList.addActionListener(new ActionListener() {
 
 			@Override
@@ -135,7 +139,10 @@ public class MainSettings extends JPanel {
 		this.add(btnSelectList);
 
 		JButton btnOk = new JButton("Ok"); //ok button confirms users file selection
-		btnOk.setBounds(375, 417, 89, 23);
+		btnOk.setFont(new Font("Arial", Font.PLAIN, 18));
+		btnOk.setBounds(700, 511, 90, 44);
+		btnOk.setBackground(new Color(255,255,50));
+		btnOk.setBorder(new MatteBorder(1,1,1,1, new Color(0,0,0)));
 		btnOk.addActionListener(new ActionListener() {
 
 			@Override
@@ -180,7 +187,10 @@ public class MainSettings extends JPanel {
 		this.add(btnOk);
 
 		JButton btnCancel = new JButton("Cancel");
-		btnCancel.setBounds(268, 417, 89, 23);
+		btnCancel.setFont(new Font("Arial", Font.PLAIN, 18));
+		btnCancel.setBounds(596, 511, 90, 44);
+		btnCancel.setBackground(new Color(255,255,50));
+		btnCancel.setBorder(new MatteBorder(1,1,1,1, new Color(0,0,0)));
 		btnCancel.addActionListener(new ActionListener() { //returns users back to menu with the level and maxNum as before
 
 			@Override

@@ -2,7 +2,9 @@ package beta;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dialog;
 import java.awt.Font;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -21,14 +23,17 @@ import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.MatteBorder;
 
 import beta.ViewAccuracy;
 
@@ -49,10 +54,11 @@ public class Quiz extends JPanel implements ActionListener {
 	private int _coins = 0;
 	private int _streak = 0;
 
-	private JButton btnListenAgain = new JButton("Listen Again");
+	private JButton btnListenAgain = new JButton("Repeat");
 	private JButton btnSubmit = new JButton("Submit");
 	private JButton btnStatistics = new JButton("Statistics");
 	private JButton btnSettings = new JButton("");
+	private JButton btnMenu = new JButton("Menu");
 
 	private JLabel lblCoin = new JLabel("Coins: 0");
 	private JLabel lblPleaseSpellWord = new JLabel("Please spell word 1 of 3:");
@@ -94,86 +100,119 @@ public class Quiz extends JPanel implements ActionListener {
 		JLabel lblQuiz = new JLabel("Quiz");
 		lblQuiz.setHorizontalAlignment(SwingConstants.CENTER);
 		lblQuiz.setFont(new Font("Comic Sans MS", Font.PLAIN, 40));
-		lblQuiz.setBounds(0, 11, 464, 57);
+		lblQuiz.setBounds(0, 11, 850, 57);
 		this.add(lblQuiz);
 
 		//Level Subtitle
 		JLabel lblLevel = new JLabel("Level " + _level);
 		lblLevel.setFont(new Font("Comic Sans MS", Font.PLAIN, 16));
 		lblLevel.setHorizontalAlignment(SwingConstants.CENTER);
-		lblLevel.setBounds(10, 65, 454, 26);
+		lblLevel.setBounds(10, 65, 850, 26);
 
 		this.add(lblLevel);
 
 		//Setting up GUI features
-		lblPleaseSpellWord.setFont(new Font("Calibri", Font.PLAIN, 18));
-		lblPleaseSpellWord.setBounds(20, 130, 187, 37);
+		lblPleaseSpellWord.setFont(new Font("Arial", Font.PLAIN, 26));
+		lblPleaseSpellWord.setBounds(56, 157, 433, 49);
 		this.add(lblPleaseSpellWord);
 
 		textField = new JTextField();
-		textField.setFont(new Font("Calibri", Font.PLAIN, 12));
-		textField.setBounds(20, 172, 410, 26);
+		textField.setFont(new Font("Calibri", Font.PLAIN, 20));
+		textField.setBounds(56, 227, 738, 49);
 		this.add(textField);
 		textField.setColumns(10);
 
-		btnSubmit.setBounds(341, 209, 89, 23);
+		btnSubmit.setBounds(442, 287, 157, 49);
+		btnSubmit.setFont(new Font("Arial Black", Font.PLAIN, 20));
+		btnSubmit.setBorder(new MatteBorder(1,1,1,1, new Color(0,0,0)));
+		btnSubmit.setBackground(new Color(255,153, 51));
+		btnSubmit.setForeground(new Color(255,255, 153));
 		this.add(btnSubmit);
 
-		btnListenAgain.setBounds(205, 209, 126, 23);
+		btnListenAgain.setBounds(268, 287, 157, 49);
+		btnListenAgain.setFont(new Font("Arial Black", Font.PLAIN, 20));
+		btnListenAgain.setBorder(new MatteBorder(1,1,1,1, new Color(0,0,0)));
+		btnListenAgain.setBackground(new Color(255,153, 51));
+		btnListenAgain.setForeground(new Color(255,255, 153));
 		this.add(btnListenAgain);
 
-		lblAcc.setFont(new Font("Calibri", Font.PLAIN, 15));
-		lblAcc.setBounds(334, 270, 130, 37);
+		lblAcc.setFont(new Font("Comic Sans MS", Font.PLAIN, 20));
+		lblAcc.setBounds(616, 436, 157, 49);
 		this.add(lblAcc);
 
 		btnSettings.setIcon(new ImageIcon("gear_ss.png"));
-		btnSettings.setBounds(419, 399, 45, 41);
+		btnSettings.setBounds(737, 511, 57, 57);
+		btnSettings.setBackground(new Color(255,255,50));
+		btnSettings.setBorder(new MatteBorder(1,1,1,1, new Color(0,0,0)));
 		btnSettings.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Settings set = new Settings();
+				Settings set = new Settings(_frame, "", Dialog.ModalityType.APPLICATION_MODAL);
 				set.setVisible(true);
 			}
 		});
 		this.add(btnSettings);
+	
 
-		lblCoin.setFont(new Font("Calibri", Font.PLAIN, 15));
+		lblCoin.setFont(new Font("Comic Sans MS", Font.PLAIN, 20));
 		lblCoin.setIcon(new ImageIcon("Coin1.png"));
-		lblCoin.setBounds(334, 309, 140, 37);
+		lblCoin.setBounds(616, 385, 148, 49);
 		this.add(lblCoin);
 
 		lblStreak.setFont(new Font("Calibri", Font.PLAIN, 15));
-		lblStreak.setBounds(300, 309, 70, 37);
+		lblStreak.setBounds(580, 385, 70, 49);
 		this.add(lblStreak);
 
 		JLabel beelbl = new JLabel("");
 		beelbl.setIcon(new ImageIcon("bee_h.png"));
-		beelbl.setBounds(307, 27, 157, 134);
+		beelbl.setBounds(611, 55, 157, 134);
 		this.add(beelbl);
 
-		JLabel lblSpeech1 = new JLabel("");
-		lblSpeech1.setIcon(new ImageIcon("test.png"));
-		lblSpeech1.setBounds(17, 110, 320, 69);
-		this.add(lblSpeech1);
+		JLabel lblUpperBox = new JLabel("");
+		lblUpperBox.setIcon(new ImageIcon("uppertbox.png"));
+		lblUpperBox.setBounds(46, 135, 584, 92);
+		this.add(lblUpperBox);
 
 		btnStatistics.setFont(new Font("Calibri", Font.PLAIN, 18));
-		btnStatistics.setBounds(294, 399, 115, 41);
+		btnStatistics.setBounds(584, 511, 138, 57);
+		btnStatistics.setBackground(new Color(255,255,50));
+		btnStatistics.setBorder(new MatteBorder(1,1,1,1, new Color(0,0,0)));
 		this.add(btnStatistics);
+		
+		btnMenu.setFont(new Font("Calibri", Font.PLAIN, 18));
+		btnMenu.setBounds(476, 511, 90, 57);
+		btnMenu.setBackground(new Color(255,255,50));
+		btnMenu.setBorder(new MatteBorder(1,1,1,1, new Color(0,0,0)));
+		btnMenu.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int option = JOptionPane.showConfirmDialog (_frame, "Are you sure you want to return to the main menu?","",JOptionPane.YES_NO_OPTION);
+				if(option == JOptionPane.YES_OPTION){
+				setVisible(false);
+				Menu menu = new Menu(_level, _frame, _wordlist, _maxNum, _file, _sound);
+				_frame.getContentPane().add(menu);
+				menu.setVisible(true);
+				}
+			}
+			
+		});
+		this.add(btnMenu);
 
 		JLabel lblSBee = new JLabel("");
 		lblSBee.setIcon(new ImageIcon("sbee2.png"));
-		lblSBee.setBounds(10, 364, 81, 76);
+		lblSBee.setBounds(39, 492, 81, 76);
 		this.add(lblSBee);
 
-		lblCorrect.setBounds(115, 268, 150, 41);
+		lblCorrect.setBounds(140, 400, 150, 41);
 		lblCorrect.setHorizontalAlignment(SwingConstants.CENTER);
 		this.add(lblCorrect);
 
-		JLabel lblSpeech = new JLabel("");
-		lblSpeech.setIcon(new ImageIcon("speech2.png"));
-		lblSpeech.setBounds(85, 234, 205, 176);
-		this.add(lblSpeech);
+		JLabel lblLowerBox = new JLabel("");
+		lblLowerBox.setIcon(new ImageIcon("lowerbox.png"));
+		lblLowerBox.setBounds(130, 349, 487, 208);
+		this.add(lblLowerBox);
 
 
 		//get the wordcount (of a particular level) rom the WordList class
@@ -558,14 +597,15 @@ public class Quiz extends JPanel implements ActionListener {
 	 * as the ability to change the voice
 	 *
 	 */
-	public class Settings extends JFrame {
+	public class Settings extends JDialog {
 
 		private JPanel contentPane;
 
 		/**
 		 * Create the frame.
 		 */
-		public Settings() {
+		public Settings(Window owner, String title, Dialog.ModalityType modType) {
+			super(owner, title, modType);
 			//set up the GUI
 			setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 			setBounds(100, 100, 410, 200);

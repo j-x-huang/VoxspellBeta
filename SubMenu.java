@@ -3,6 +3,7 @@ package beta;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -21,6 +22,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import javax.swing.SwingConstants;
+import javax.swing.border.MatteBorder;
 
 public class SubMenu extends JPanel {
 
@@ -59,16 +61,16 @@ public class SubMenu extends JPanel {
 		this.setLayout(null);
 
 		JLabel lblQuizFinished = new JLabel("Quiz Finished");
-		lblQuizFinished.setFont(new Font("Calibri Light", Font.PLAIN, 26));
+		lblQuizFinished.setFont(new Font("Calibri Light", Font.PLAIN, 30));
 		lblQuizFinished.setHorizontalAlignment(SwingConstants.CENTER);
-		lblQuizFinished.setBounds(10, 72, 454, 45);
+		lblQuizFinished.setBounds(10, 55, 850, 45);
 		this.add(lblQuizFinished);
 
 
 		JLabel lblNewLabel = new JLabel("You scored: " + correct + "/" + testNum); //display results of the quiz
 		lblNewLabel.setFont(new Font("Calibri Light", Font.PLAIN, 16));
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel.setBounds(10, 120, 454, 28);
+		lblNewLabel.setBounds(10, 100, 850, 28);
 		this.add(lblNewLabel);
 
 		double percentage = ((double) correct * 100 )/ (double) testNum;
@@ -85,11 +87,10 @@ public class SubMenu extends JPanel {
 
 		lblWellDone.setHorizontalAlignment(SwingConstants.CENTER);
 		lblWellDone.setFont(new Font("Calibri Light", Font.PLAIN, 16));
-		lblWellDone.setBounds(20, 141, 444, 28);
+		lblWellDone.setBounds(20, 121, 850, 28);
 		this.add(lblWellDone);
 
 		//This button lets users go back to the menu for the same level as before
-		btnReturnToMenu.setBounds(170, 232, 145, 35);
 		btnReturnToMenu.addActionListener(new ActionListener() {
 
 			@Override
@@ -100,9 +101,14 @@ public class SubMenu extends JPanel {
 				menu.setVisible(true);
 			}
 		});
+		btnReturnToMenu.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnReturnToMenu.setFont(new Font("Arial Black", Font.PLAIN, 20));
+		btnReturnToMenu.setBorder(new MatteBorder(3,3,3,3, new Color(0,0,0)));
+		btnReturnToMenu.setBounds(323, 252, 200, 69);
+		btnReturnToMenu.setBackground(new Color(255,153, 51));
+		btnReturnToMenu.setForeground(new Color(255,255, 153));
 		this.add(btnReturnToMenu);
 		//this button lets users repeat quiz
-		btnRepeatQuiz.setBounds(170, 278, 145, 35);
 		btnRepeatQuiz.addActionListener(new ActionListener() {
 
 			@Override
@@ -119,10 +125,15 @@ public class SubMenu extends JPanel {
 			}
 
 		});
+		btnRepeatQuiz.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnRepeatQuiz.setFont(new Font("Arial Black", Font.PLAIN, 20));
+		btnRepeatQuiz.setBorder(new MatteBorder(3,3,3,3, new Color(0,0,0)));
+		btnRepeatQuiz.setBounds(323, 342, 200, 69);
+		btnRepeatQuiz.setBackground(new Color(255,153, 51));
+		btnRepeatQuiz.setForeground(new Color(255,255, 153));
 		this.add(btnRepeatQuiz);
 		
 		//Makes statistics panel visible
-		btnViewStatistics.setBounds(170, 324, 145, 35);
 		btnViewStatistics.addActionListener(new ActionListener() {
 
 			@Override
@@ -132,24 +143,35 @@ public class SubMenu extends JPanel {
 			}
 
 		});
+		btnViewStatistics.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnViewStatistics.setFont(new Font("Arial Black", Font.PLAIN, 20));
+		btnViewStatistics.setBorder(new MatteBorder(3,3,3,3, new Color(0,0,0)));
+		btnViewStatistics.setBounds(323, 432, 200, 69);
+		btnViewStatistics.setBackground(new Color(255,153, 51));
+		btnViewStatistics.setForeground(new Color(255,255, 153));
 		this.add(btnViewStatistics);
 		
 		//This button only appears if users scored at least 90%
 		//makes the video player
-		btnWatchVideo.setBounds(170, 370, 145, 35);
 		btnWatchVideo.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				_sound.stop();
 				MediaPlayer mp = new MediaPlayer();
 
 			}
 
 		});
+		btnWatchVideo.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnWatchVideo.setFont(new Font("Arial Black", Font.PLAIN, 20));
+		btnWatchVideo.setBorder(new MatteBorder(3,3,3,3, new Color(0,0,0)));
+		btnWatchVideo.setBounds(323, 522, 200, 69);
+		btnWatchVideo.setBackground(new Color(255,153, 51));
+		btnWatchVideo.setForeground(new Color(255,255, 153));
 		
 		//This button only appears if users scored at least 90%
 		//allows users to do quizzes at the next level (if possible)
-		btnAdvance.setBounds(170, 190, 145, 35);
 		btnAdvance.addActionListener(new ActionListener() {
 
 			@Override
@@ -169,10 +191,15 @@ public class SubMenu extends JPanel {
 			}
 
 		});
+		btnAdvance.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnAdvance.setFont(new Font("Arial Black", Font.PLAIN, 20));
+		btnAdvance.setBorder(new MatteBorder(3,3,3,3, new Color(0,0,0)));
+		btnAdvance.setBounds(323, 162, 200, 69);
+		btnAdvance.setBackground(new Color(255,153, 51));
+		btnAdvance.setForeground(new Color(255,255, 153));
 		//This button allows users to purchase using the coins the next level
 		// so they can start doing quizzes at a higher level. Only appears if
 		// user scored <90%
-		btnCoins .setBounds(170, 190, 145, 35);
 		btnCoins.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -197,6 +224,12 @@ public class SubMenu extends JPanel {
 			}
 
 		});
+		btnCoins.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnCoins.setFont(new Font("Arial Black", Font.PLAIN, 20));
+		btnCoins.setBorder(new MatteBorder(3,3,3,3, new Color(0,0,0)));
+		btnCoins.setBounds(323, 162, 200, 69);
+		btnCoins.setBackground(new Color(255,153, 51));
+		btnCoins.setForeground(new Color(255,255, 153));
 
 		if (_advance) {
 			this.add(btnWatchVideo);
