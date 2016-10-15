@@ -3,7 +3,6 @@ package beta;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
-import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -25,17 +24,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.ScrollPaneLayout;
 import javax.swing.SwingConstants;
 import javax.swing.table.AbstractTableModel;
 
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartPanel;
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.labels.StandardPieSectionLabelGenerator;
-import org.jfree.chart.plot.PiePlot;
-import org.jfree.data.general.DefaultPieDataset;
-import org.jfree.data.general.PieDataset;
+
 
 public class ViewAccuracy extends JPanel implements ItemListener{
 
@@ -46,8 +38,6 @@ public class ViewAccuracy extends JPanel implements ItemListener{
 	private ArrayList<Double> accuracyList = new ArrayList<Double>();
 
 
-	private final String[] COLUMN_HEADERS = {"Level", "Accuracy", "Successes","Attempts","High Score" };
-	private final Class<?> _colClasses[] = {String.class, String.class, Integer.class,Integer.class, Integer.class};
 
 	private int _size;
 	private int[] _levels;
@@ -65,9 +55,7 @@ public class ViewAccuracy extends JPanel implements ItemListener{
 		_levels = wl.getLevels(); //get the number of levels in the wordlist
 		_size = _levels.length;
 		
-		//creates the JTable and adds to panel
-		StatsTable st = new StatsTable();
-		JTable table = new JTable(st);
+	
 		this.setLayout(new BorderLayout());
 		JButton returnBtn = new JButton("Return"); ///make return button
 		returnBtn.addActionListener(new ActionListener() { //return button makes the panel invisible
@@ -189,8 +177,16 @@ public class ViewAccuracy extends JPanel implements ItemListener{
 			JPanel piePanel = pm.getPieChart();
 			piePanel.setBounds(10, 10, 800, 500);
 			outerPanel.add(piePanel);
+						
+			JScrollPane tablePanel = new JScrollPane();
+			tablePanel.setBounds(20, 570, 750, 200);
+			StatsTable st = new StatsTable(level);
+			JTable table = new JTable(st);
+			tablePanel.setViewportView(table);
+			outerPanel.add(tablePanel);
 			
 			_mainPanel.add(sp, Integer.toString(level));
+
 			
 		}
 		
@@ -213,37 +209,45 @@ public class ViewAccuracy extends JPanel implements ItemListener{
 
 
 	class StatsTable extends AbstractTableModel {
-
-		public StatsTable() {
-
+		
+		private final String[] COLUMN_HEADERS = {"Word", "Correct", "Incorrects", "Attempts"};
+		private final Class<?> _colClasses[] = {String.class, Integer.class,Integer.class, Integer.class};
+		private int _level;
+		private int _levelSize;
+		private ArrayList<Word> wlist;
+		
+		public StatsTable(int level) {
+			_level = level;
+			
+			_levelSize = wl.getLevelLength(level);
+			
+			wlist = wl.getLevelMap().get(level);
+			
 		}
 
 		@Override
 		public int getRowCount() {
-			return _size;
+			return _levelSize;
 		}
 
 		@Override
 		public int getColumnCount() {
-			return 5;
+			return 4;
 
 		}
 		//Add values from the arraylists into the table
 		@Override
 		public Object getValueAt(int rowIndex, int columnIndex) {
 			if (columnIndex == 0) {
-				return "Level " + _levels[rowIndex];
+				return wlist.get(rowIndex).toString();
 			} else if (columnIndex == 1) {
-				return accuracyList.get(rowIndex) + "%";
+				return wlist.get(rowIndex).getCorrect();
 			} else if (columnIndex == 2) {
-				int correct = attemptsList.get(rowIndex) - failsList.get(rowIndex);
-				return correct;
+				return wlist.get(rowIndex).getFails();
 			} else if (columnIndex == 3) {
-				return attemptsList.get(rowIndex);
+				return wlist.get(rowIndex).getAttempts();
 
-			} else if (columnIndex == 4) {
-				return scoreList.get(rowIndex);
-			}
+			} 
 			return null;
 		}
 

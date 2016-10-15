@@ -47,12 +47,19 @@ public class Main extends JFrame{
 			e.printStackTrace();
 		}
 		_level = levelSelect();
-		
-		Sound sound = new Sound("bensound-acousticbreeze.wav"); //play background music
-		sound.loop();
-		Menu menu = new Menu(_level, this, _wl, 10, _mainFile, sound);
-		contentPane.add(menu);
-		menu.setVisible(true);
+
+		if (_level == 0 ) {
+			setVisible(false);
+			dispose();
+			System.exit(0);
+		} else {
+
+			Sound sound = new Sound("bensound-acousticbreeze.wav"); //play background music
+			sound.loop();
+			Menu menu = new Menu(_level, this, _wl, 10, _mainFile, sound);
+			contentPane.add(menu);
+			menu.setVisible(true);
+		}
 	}
 
 	public static void main(String[] args) {
@@ -79,12 +86,12 @@ public class Main extends JFrame{
 
 
 		if(num==null){
-			return 1; //if user cancels option just return to level 1
+			return 0; 
 		}else{
 			return Integer.parseInt(num);
 		} 
 	}
-	
+
 	protected Sound getSound() {
 		return sound;
 	}

@@ -203,35 +203,29 @@ public class Menu extends JPanel {
 	//stores information.
 	protected void clearStats() throws IOException{
 		
-		WordList wl = null;
-		try {
-			wl = new WordList(_file);
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+	
 
-		int[] levels = wl.getLevels();
+		int[] levels = _wordlist.getLevels();
 		int size = levels.length;
 
 		for (int i = 0; i < size; i++) {
 			File accuracy = new File(".accuracy_" + levels[i]);
 			accuracy.delete();
 		}
+		File save = new File(".save.ser");
+		if (save.exists()) {
+			save.delete();
+		}
+		_wordlist = new WordList(_file);
+		
 	}
 
 	//Creates save files to store the accuracy, then add zeros to the file. There is a save 
 	//file for each level. This function also creates the save files that keeps track of coins
 	private void createAccuracy() {
-		WordList wl = null;
-		try {
-			wl = new WordList(_file);
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+		
 
-		int[] levels = wl.getLevels();
+		int[] levels = _wordlist.getLevels();
 		int size = levels.length;
 		try {
 			for (int i = 0; i < size; i++) {

@@ -45,7 +45,7 @@ public class Quiz extends JPanel implements ActionListener {
 	private int _fails;
 	private int _maxNum;
 	protected ArrayList<String> _voices;
-	private ArrayList<String> _testList = new ArrayList<String>();
+	private ArrayList<Word> _testList = new ArrayList<Word>();
 	private String _voice;
 	private JComboBox<String> _selectVoices;
 	private JPanel _main;
@@ -239,7 +239,7 @@ public class Quiz extends JPanel implements ActionListener {
 		_frame.getRootPane().setDefaultButton(btnSubmit); //make submit default button
 		//Word to be tested
 		setTestList(_wordlist);
-		festival("Spell " + _testList.get(_testNo-1));
+		festival("Spell " + _testList.get(_testNo-1).toString());
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -252,20 +252,20 @@ public class Quiz extends JPanel implements ActionListener {
 			JButton button = (JButton) e.getSource();  
 			if (button.equals(btnListenAgain)){  
 
-				festival(_testList.get(_testNo-1));
+				festival(_testList.get(_testNo-1).toString());
 				return;
 			}else if (button.equals(btnStatistics)){ //makes statistics on a separate panel
 				makeTable();
 				return;
 			}
 			//If user is correct
-			if(_testList.get(_testNo-1).equalsIgnoreCase(word)){
+			if(_testList.get(_testNo-1).toString().equalsIgnoreCase(word)){
 				//Showing and telling correct message
 				Sound sound = new Sound("cheering.wav"); //plays a cheering sound
 				sound.play();
 				
 				lblCorrect.setText("Correct!!");
-
+				_testList.get(_testNo -1).increaseCorrect();
 				//update accuracy and streak
 				_attempts++;
 				_testNo++;
@@ -304,7 +304,7 @@ public class Quiz extends JPanel implements ActionListener {
 				if(incorrect<1){
 					//Setting message to the user about the fault
 					lblCorrect.setText("Incorrect. Try again");
-					festival("Incorrect!! Spell"+_testList.get(_testNo-1)+".");
+					festival("Incorrect!! Spell"+_testList.get(_testNo-1).toString()+".");
 					//Word is spoken again.
 					incorrect++;
 					textField.setText("");
@@ -317,6 +317,7 @@ public class Quiz extends JPanel implements ActionListener {
 					//increase test number and fail value
 					_attempts++;
 					_fails++;
+					_testList.get(_testNo -1).increaseFails();
 
 					_streak = 0; // streak resets
 					//Changing field as needed
@@ -354,7 +355,7 @@ public class Quiz extends JPanel implements ActionListener {
 
 			}else{
 				//Continue the quiz
-				festival(lblCorrect.getText()+" Spell "+_testList.get(_testNo-1)+".");
+				festival(lblCorrect.getText()+" Spell "+_testList.get(_testNo-1).toString()+".");
 			}
 		}catch(Exception excep){
 			excep.printStackTrace();
@@ -402,13 +403,7 @@ public class Quiz extends JPanel implements ActionListener {
 		festival(word);
 	}
 
-	/*
-	//Setting the word to be tested using getRandomWord method from word list
-	private void setWord() throws IOException{
-		WordList wordlist = new WordList(_file);
-		_testWord = wordlist.getRandomWord(1);	
-	}
-	 */
+
 	
 	//method makes the list of words to be tested 
 	private void setTestList(WordList wordlist) throws IOException{
@@ -484,74 +479,6 @@ public class Quiz extends JPanel implements ActionListener {
 		bw.write(_highScore + "\n");
 		bw.close();
 	}
-	/*
-	//Putting Failed word into failed list
-	private void failed() throws IOException{
-		File failed = new File(".failed"+_level);
-		//If file does not exist, create new file
-		if(!failed.exists()) {
-			failed.createNewFile();
-		} 
-
-		//Appending the word to the file
-		Writer output;
-		output = new BufferedWriter(new FileWriter(failed,true)); 
-		output.append(_testList.get(_testNo-1)+"\n");
-		output.close();
-	}
-
-	private void removeFailed(String word) throws IOException{
-		File failed = new File(".failed"+_level);
-		//If file does not exist, create new file
-		if(!failed.exists()) {
-			failed.createNewFile();
-		} 
-		//Creating temporary file to store data
-		File temp = new File(".temp");
-		if(!temp.exists())
-			temp.createNewFile();
-
-		//Choosing input and output files
-		BufferedReader input = new BufferedReader(new FileReader("."+File.separator+failed));
-		PrintWriter output= new PrintWriter(new FileWriter("."+File.separator+temp));
-
-		String line;
-
-		//Reading word where and adding it to arrayList if it is not an empty line
-		while ((line = input.readLine()) != null){
-			//If the line does not equal to line to remove, it is copied to temp file
-			if(!word.equalsIgnoreCase(line.trim())){
-				output.println(line);
-				output.flush();
-			}	
-		}
-
-		//Closing input output streams
-		input.close();
-		output.close();
-
-		//Delete orginal file
-		failed.delete();
-
-		//Changing output file to be the failed list file.
-		temp.renameTo(failed);
-	}
-
-	//Adding failed word to the failed_total list
-	private void failedTotal() throws IOException{
-		File failed = new File(".failed_total"+_level);
-		//If file does not exist, create new file
-		if(!failed.exists()) {
-			failed.createNewFile();
-		} 
-
-		//Appending the word to the file
-		Writer output;
-		output = new BufferedWriter(new FileWriter(failed,true)); 
-		output.append(_testList.get(_testNo-1)+"\n");
-		output.close();
-	}
-	*/
 
 	//makes statistics table visible
 	private void makeTable() {
@@ -608,37 +535,40 @@ public class Quiz extends JPanel implements ActionListener {
 			super(owner, title, modType);
 			//set up the GUI
 			setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-			setBounds(100, 100, 410, 200);
+			setBounds(100, 100, 500, 230);
 			setResizable(false);
 			contentPane = new JPanel();
 			contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 			setContentPane(contentPane);
 			contentPane.setLayout(null);
+			contentPane.setBackground(new Color(255,255,152));
 
 			JLabel lblChangeVoice = new JLabel("Change Voice");
-			lblChangeVoice.setBounds(10, 99, 135, 24);
+			lblChangeVoice.setFont(new Font("Arial", Font.PLAIN, 18));
+			lblChangeVoice.setBounds(25, 130, 135, 24);
 			contentPane.add(lblChangeVoice);
 
 			String[] voices = _voices.toArray(new String[_voices.size()]); //get the list of voices installed on users computer
 
 			final JComboBox<String> comboBox = new JComboBox<String>(voices);
-			comboBox.setBounds(182, 101, 196, 20);
+			comboBox.setBounds(220, 125, 210, 30);
 			contentPane.add(comboBox);
 
 			JLabel lblSettings = new JLabel("Settings");
 			lblSettings.setHorizontalAlignment(SwingConstants.CENTER);
 			lblSettings.setFont(new Font("Calibri Light", Font.PLAIN, 25));
-			lblSettings.setBounds(10, 11, 374, 29);
+			lblSettings.setBounds(10, 11, 500, 29);
 			contentPane.add(lblSettings);
 
 			JLabel lblMute = new JLabel("Stop Music");
-			lblMute.setBounds(10, 74, 135, 20);
+			lblMute.setFont(new Font("Arial", Font.PLAIN, 18));
+			lblMute.setBounds(25, 74, 135, 20);
 			contentPane.add(lblMute);
 			
 			//This buttons stops and starts background music
 			JToggleButton toggleButton = new JToggleButton("");
 			toggleButton.setIcon(new ImageIcon("mute2.png"));
-			toggleButton.setBounds(182, 50, 57, 40);
+			toggleButton.setBounds(220, 60, 57, 40);
 			toggleButton.addItemListener(new ItemListener() {
 
 				@Override
@@ -655,6 +585,8 @@ public class Quiz extends JPanel implements ActionListener {
 
 			//Upon pressing the ok button. The voice is changed.
 			JButton btnOK = new JButton("Ok");
+			btnOK.setBackground(new Color(255,255,50));
+			btnOK.setBorder(new MatteBorder(1,1,1,1, new Color(0,0,0)));
 			btnOK.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					String data = (String) comboBox.getItemAt(comboBox.getSelectedIndex());
@@ -662,7 +594,7 @@ public class Quiz extends JPanel implements ActionListener {
 					dispose();
 				}
 			});
-			btnOK.setBounds(289, 132, 89, 23);
+			btnOK.setBounds(350, 170, 89, 40);
 			contentPane.add(btnOK);
 		}
 	}

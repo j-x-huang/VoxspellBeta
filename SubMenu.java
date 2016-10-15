@@ -237,6 +237,9 @@ public class SubMenu extends JPanel {
 		} else {
 			this.add(btnCoins);
 		}
+		
+		_wordList.saveData();
+
 	}
 	//makes table panel visible
 	private void makeTable() {
