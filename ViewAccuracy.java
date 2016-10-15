@@ -1,26 +1,43 @@
 package beta;
 
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
+import java.awt.Color;
 import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.ScrollPaneLayout;
 import javax.swing.SwingConstants;
 import javax.swing.table.AbstractTableModel;
 
-public class ViewAccuracy extends JPanel{
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.labels.StandardPieSectionLabelGenerator;
+import org.jfree.chart.plot.PiePlot;
+import org.jfree.data.general.DefaultPieDataset;
+import org.jfree.data.general.PieDataset;
+
+public class ViewAccuracy extends JPanel implements ItemListener{
 
 
 	private ArrayList<Integer> attemptsList = new ArrayList<Integer>();
@@ -36,11 +53,14 @@ public class ViewAccuracy extends JPanel{
 	private int[] _levels;
 	private JPanel returnPanel;
 	private int _coins;
+	private JComboBox levelSelect;
+	private WordList wl;
+	private JPanel _mainPanel;
 
 
 	public ViewAccuracy(WordList wordlist, JPanel panel) {
 		returnPanel = panel;
-		WordList wl = wordlist;
+		wl = wordlist;
 
 		_levels = wl.getLevels(); //get the number of levels in the wordlist
 		_size = _levels.length;
@@ -60,8 +80,7 @@ public class ViewAccuracy extends JPanel{
 		});
 		
 		
-		this.add(new JScrollPane(table), BorderLayout.CENTER);
-		this.add(returnBtn, BorderLayout.SOUTH);
+		//this.add(new JScrollPane(table), BorderLayout.CENTER);
 		getCoins();
 		JLabel coinLbl = new JLabel("Coins: " + _coins);	//Show the coin value in a label
 		coinLbl.setHorizontalAlignment(SwingConstants.TRAILING);
@@ -71,7 +90,112 @@ public class ViewAccuracy extends JPanel{
 		topPanel.add(titleLbl);
 		topPanel.add(coinLbl);
 		this.add(topPanel, BorderLayout.NORTH);
+		
+		//This for loop reads all accuracy save files and adds the values to some lists
+		for (int i = 0; i < _size; i++) {
+			try {
+				FileReader fr = new FileReader(".accuracy_" + _levels[i]);
+				BufferedReader br = new BufferedReader(fr);
+				String str;
+				str = br.readLine();
+				attemptsList.add(Integer.parseInt(str));
+				str = br.readLine();
+				failsList.add(Integer.parseInt(str));
+				str = br.readLine();
+				scoreList.add(Integer.parseInt(str));
+				br.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		//This for loop calculates the overall accuracy (as a percentage) for all levels
+		for (int j = 0; j < _size; j++) {
+			double num = 0;
+			if (attemptsList.get(j) != 0) {
+				num = (double) failsList.get(j) / (double) attemptsList.get(j);
+				num = 100 - (num * 100);
+
+				num = (double) Math.round(num * 100) / 100;
+
+			}
+
+			accuracyList.add(num);
+		}
+		
+
+		
+		//combobox stuff
+		String[] levelStrings = new String[_size + 1];
+		levelStrings[0] = "Overall";
+		
+		for (int k = 1; k < _size + 1; k++) {
+			levelStrings[k] = Integer.toString(_levels[k-1]);
+		}
+		levelSelect = new JComboBox(levelStrings);
+		levelSelect.addItemListener(this);
+		JPanel southPanel = new JPanel();
+		southPanel.add(levelSelect);
+		southPanel.add(returnBtn);
+		this.add(southPanel, BorderLayout.SOUTH);
+		
+		int accSum = 0;
+		for (int x : attemptsList) {
+			accSum+=x;
+		}
+		int failSum = 0;
+		for (int x : failsList) {
+			failSum+=x;
+		}
+		int correctSum = accSum - failSum;
+		
+		//Pie Chart Stuff
+		JPanel outerPanel = new JPanel();
+		outerPanel.setLayout(null);
+		outerPanel.setPreferredSize(new Dimension(600,830));
+		outerPanel.setBackground(new Color(255,255,152));
+		JScrollPane sp = new JScrollPane(outerPanel);
+		PieModel pm = new PieModel(correctSum, failSum, "All Levels");
+		JPanel piePanel = pm.getPieChart();
+		piePanel.setBounds(10, 10, 800, 500);
+		outerPanel.add(piePanel);
+		
+		_mainPanel = new JPanel(new CardLayout());
+		_mainPanel.add(sp, "Overall");
+		createCharts();
+		
+		this.add(_mainPanel);
+		
 	}
+	
+	@Override
+	public void itemStateChanged(ItemEvent evt) {
+		CardLayout cl = (CardLayout)(_mainPanel.getLayout());
+	    cl.show(_mainPanel, (String)evt.getItem());
+		
+	}
+	
+	private void createCharts() {
+		for (int i = 0; i < _size; i++) {
+			int level = _levels[i];
+			JPanel outerPanel = new JPanel();
+			outerPanel.setLayout(null);
+			outerPanel.setPreferredSize(new Dimension(600,830));
+			outerPanel.setBackground(new Color(255,255,152));
+			JScrollPane sp = new JScrollPane(outerPanel);
+			
+			int correct = attemptsList.get(i) - failsList.get(i);
+			PieModel pm = new PieModel(correct, failsList.get(i), "Level "  + Integer.toString(level));
+			JPanel piePanel = pm.getPieChart();
+			piePanel.setBounds(10, 10, 800, 500);
+			outerPanel.add(piePanel);
+			
+			_mainPanel.add(sp, Integer.toString(level));
+			
+		}
+		
+	}
+	
 	//reads the coin value from save file and adds it to the coins field
 	private void getCoins() {
 		try {
@@ -85,40 +209,12 @@ public class ViewAccuracy extends JPanel{
 			e.printStackTrace();
 		}
 	}
+	
+
 
 	class StatsTable extends AbstractTableModel {
 
 		public StatsTable() {
-			//This for loop reads all accuracy save files and adds the values to some lists
-			for (int i = 0; i < _size; i++) {
-				try {
-					FileReader fr = new FileReader(".accuracy_" + _levels[i]);
-					BufferedReader br = new BufferedReader(fr);
-					String str;
-					str = br.readLine();
-					attemptsList.add(Integer.parseInt(str));
-					str = br.readLine();
-					failsList.add(Integer.parseInt(str));
-					str = br.readLine();
-					scoreList.add(Integer.parseInt(str));
-					br.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-			//This for loop calculates the overall accuracy (as a percentage) for all levels
-			for (int j = 0; j < _size; j++) {
-				double num = 0;
-				if (attemptsList.get(j) != 0) {
-					num = (double) failsList.get(j) / (double) attemptsList.get(j);
-					num = 100 - (num * 100);
-
-					num = (double) Math.round(num * 100) / 100;
-
-				}
-
-				accuracyList.add(num);
-			}
 
 		}
 
@@ -161,6 +257,7 @@ public class ViewAccuracy extends JPanel{
 			return _colClasses[column];
 		}
 	}
+
 
 }
 
