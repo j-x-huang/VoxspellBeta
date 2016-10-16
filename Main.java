@@ -42,7 +42,7 @@ public class Main extends JFrame{
 			String str;
 			str = br.readLine();
 			_mainFile = new File(str);
-			_wl = new WordList(_mainFile);
+			_wl = new WordList(_mainFile, _mainFile.getName());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

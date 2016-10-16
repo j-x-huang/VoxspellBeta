@@ -56,14 +56,13 @@ public class Quiz extends JPanel implements ActionListener {
 
 	private JButton btnListenAgain = new JButton("Repeat");
 	private JButton btnSubmit = new JButton("Submit");
-	private JButton btnStatistics = new JButton("Statistics");
 	private JButton btnSettings = new JButton("");
 	private JButton btnMenu = new JButton("Menu");
 
 	private JLabel lblCoin = new JLabel("Coins: 0");
 	private JLabel lblPleaseSpellWord = new JLabel("Please spell word 1 of 3:");
 	private JLabel lblAcc = new JLabel("Accuracy: 0/10");
-	private JLabel lblCorrect = new JLabel("Oh hello there!");
+	private JLabel lblCorrect = new JLabel("<html>Oh hello there! My name is Richard Parker, and I will be helping you with your spelling today.</html>");
 	private JLabel lblStreak = new JLabel();
 	private int _correct=0;
 	private int incorrect;
@@ -75,6 +74,8 @@ public class Quiz extends JPanel implements ActionListener {
 	private Sound _sound;
 	private Timer _timer;
 	private int _highScore;
+	private String _fileName;
+	private String _correctness;
 
 	/**
 	 * Create the panel.
@@ -86,6 +87,7 @@ public class Quiz extends JPanel implements ActionListener {
 		_wordlist = wordlist;
 		_file = file;
 		_sound = sound;
+		_fileName = _file.getName();
 
 		getAccuracy();
 		getCoins();
@@ -173,15 +175,9 @@ public class Quiz extends JPanel implements ActionListener {
 		lblUpperBox.setIcon(new ImageIcon("uppertbox.png"));
 		lblUpperBox.setBounds(46, 135, 584, 92);
 		this.add(lblUpperBox);
-
-		btnStatistics.setFont(new Font("Calibri", Font.PLAIN, 18));
-		btnStatistics.setBounds(584, 511, 138, 57);
-		btnStatistics.setBackground(new Color(255,255,50));
-		btnStatistics.setBorder(new MatteBorder(1,1,1,1, new Color(0,0,0)));
-		this.add(btnStatistics);
 		
 		btnMenu.setFont(new Font("Calibri", Font.PLAIN, 18));
-		btnMenu.setBounds(476, 511, 90, 57);
+		btnMenu.setBounds(620, 511, 100, 57);
 		btnMenu.setBackground(new Color(255,255,50));
 		btnMenu.setBorder(new MatteBorder(1,1,1,1, new Color(0,0,0)));
 		btnMenu.addActionListener(new ActionListener() {
@@ -205,8 +201,8 @@ public class Quiz extends JPanel implements ActionListener {
 		lblSBee.setBounds(39, 492, 81, 76);
 		this.add(lblSBee);
 
-		lblCorrect.setBounds(140, 400, 150, 41);
-		lblCorrect.setHorizontalAlignment(SwingConstants.CENTER);
+		lblCorrect.setBounds(140, 200, 400, 400);
+		lblCorrect.setFont(new Font("Arial", Font.PLAIN, 18));
 		this.add(lblCorrect);
 
 		JLabel lblLowerBox = new JLabel("");
@@ -234,7 +230,6 @@ public class Quiz extends JPanel implements ActionListener {
 
 		btnListenAgain.addActionListener(this);
 		btnSubmit.addActionListener(this);
-		btnStatistics.addActionListener(this);
 
 		_frame.getRootPane().setDefaultButton(btnSubmit); //make submit default button
 		//Word to be tested
@@ -254,9 +249,6 @@ public class Quiz extends JPanel implements ActionListener {
 
 				festival(_testList.get(_testNo-1).toString());
 				return;
-			}else if (button.equals(btnStatistics)){ //makes statistics on a separate panel
-				makeTable();
-				return;
 			}
 			//If user is correct
 			if(_testList.get(_testNo-1).toString().equalsIgnoreCase(word)){
@@ -264,7 +256,6 @@ public class Quiz extends JPanel implements ActionListener {
 				Sound sound = new Sound("cheering.wav"); //plays a cheering sound
 				sound.play();
 				
-				lblCorrect.setText("Correct!!");
 				_testList.get(_testNo -1).increaseCorrect();
 				//update accuracy and streak
 				_attempts++;
@@ -277,18 +268,23 @@ public class Quiz extends JPanel implements ActionListener {
 					_coins+=50;
 					_hiddenCoins+=50;
 					lblStreak.setText("+50");
+					lblCorrect.setText("<html>Correct! Very Nice.</html>");
 				} else if (_streak > 2) {
 					_coins+=20;
 					_hiddenCoins+=20;
 					lblStreak.setText("+20");
+					lblCorrect.setText("<html>Correct! Well Done! Keep Going.</html>");
 				} else {
 					_coins+=10;
 					_hiddenCoins+=10;
 					lblStreak.setText("+10");
+					lblCorrect.setText("<html>Correct! <br>Awesome, you're on a roll!</html>");
+
 				}
 				blink(); //flash 'Streak' label text
 				updateCoins();
 				lblCoin.setText("Coins: "+ _coins);
+				_correctness = "Correct!!";
 
 				//Setting the new label
 				lblPleaseSpellWord.setText("Spell word "+(_testNo)+" of "+_maxNum+": ");
@@ -324,6 +320,8 @@ public class Quiz extends JPanel implements ActionListener {
 
 					_testNo++;
 					incorrect =0;
+					_correctness = "Incorrect";
+
 
 					//Setting new label for new quiz
 					lblPleaseSpellWord.setText("Spell word "+(_testNo)+" of "+_maxNum+": ");
@@ -340,7 +338,7 @@ public class Quiz extends JPanel implements ActionListener {
 			//If test is finished
 			if((_testNo==_maxNum+1)||(_wc<_testNo)){
 				//Telling the user the teset is finished
-				lblCorrect.setText(lblCorrect.getText()+" Quiz Finished!!");
+				lblCorrect.setText(_correctness+" Quiz Finished!!");
 				festival(lblCorrect.getText());
 				//Update high score
 				if (_correct > _highScore) {
@@ -355,7 +353,7 @@ public class Quiz extends JPanel implements ActionListener {
 
 			}else{
 				//Continue the quiz
-				festival(lblCorrect.getText()+" Spell "+_testList.get(_testNo-1).toString()+".");
+				festival(_correctness+" Spell "+_testList.get(_testNo-1).toString()+".");
 			}
 		}catch(Exception excep){
 			excep.printStackTrace();
@@ -413,7 +411,7 @@ public class Quiz extends JPanel implements ActionListener {
 	//Obtains the accuracy values from the save file (for the current quiz level)
 	// then add the levels to the corresponding fields
 	private void getAccuracy() throws IOException {
-		File accuracy = new File(".accuracy_" + _level);
+		File accuracy = new File("." + _fileName + "_" + _level);
 		if (! accuracy.exists()) {
 			accuracy.createNewFile();
 		} else {
@@ -466,7 +464,7 @@ public class Quiz extends JPanel implements ActionListener {
 	//Write the values from the accuracy fields (_attempts, _fails) to the corresponding
 	// save files
 	private void updateAccuracy() throws IOException {
-		File accuracy = new File(".accuracy_" + _level);
+		File accuracy = new File("." + _fileName + "_" + _level);
 
 		PrintWriter pw = new PrintWriter(accuracy);
 		pw.close();
@@ -569,6 +567,9 @@ public class Quiz extends JPanel implements ActionListener {
 			JToggleButton toggleButton = new JToggleButton("");
 			toggleButton.setIcon(new ImageIcon("mute2.png"));
 			toggleButton.setBounds(220, 60, 57, 40);
+			if(! _sound.isActive()) {
+				toggleButton.setSelected(true);
+			}
 			toggleButton.addItemListener(new ItemListener() {
 
 				@Override

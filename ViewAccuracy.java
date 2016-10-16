@@ -25,6 +25,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
+import javax.swing.border.MatteBorder;
 import javax.swing.table.AbstractTableModel;
 
 
@@ -54,6 +55,7 @@ public class ViewAccuracy extends JPanel implements ItemListener{
 
 		_levels = wl.getLevels(); //get the number of levels in the wordlist
 		_size = _levels.length;
+		String fileName = wl.getFileName();
 		
 	
 		this.setLayout(new BorderLayout());
@@ -82,7 +84,7 @@ public class ViewAccuracy extends JPanel implements ItemListener{
 		//This for loop reads all accuracy save files and adds the values to some lists
 		for (int i = 0; i < _size; i++) {
 			try {
-				FileReader fr = new FileReader(".accuracy_" + _levels[i]);
+				FileReader fr = new FileReader("." + fileName + "_" + _levels[i]);
 				BufferedReader br = new BufferedReader(fr);
 				String str;
 				str = br.readLine();
@@ -184,6 +186,11 @@ public class ViewAccuracy extends JPanel implements ItemListener{
 			JTable table = new JTable(st);
 			tablePanel.setViewportView(table);
 			outerPanel.add(tablePanel);
+			
+			JLabel scoreLabel = new JLabel("High Score: " + scoreList.get(i));
+			scoreLabel.setBounds(20, 780, 250, 40);
+			scoreLabel.setFont(new Font("Arial", Font.PLAIN, 26));
+			outerPanel.add(scoreLabel);
 			
 			_mainPanel.add(sp, Integer.toString(level));
 

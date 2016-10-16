@@ -39,7 +39,7 @@ public class Menu extends JPanel {
 	private JFrame _frame;
 	private int _wordNum;
 	private File _file;
-
+	private String _fileName;
 	private WordList _wordlist;
 
 	private Sound _sound;
@@ -54,6 +54,7 @@ public class Menu extends JPanel {
 		_wordNum = wordNum;
 		_file = file;
 		_sound = sound;
+		_fileName = _file.getName();
 
 		createAccuracy();
 
@@ -209,14 +210,14 @@ public class Menu extends JPanel {
 		int size = levels.length;
 
 		for (int i = 0; i < size; i++) {
-			File accuracy = new File(".accuracy_" + levels[i]);
+			File accuracy = new File("." + _fileName + "_" + levels[i]);
 			accuracy.delete();
 		}
-		File save = new File(".save.ser");
+		File save = new File("."+_file.getName()+".ser");
 		if (save.exists()) {
 			save.delete();
 		}
-		_wordlist = new WordList(_file);
+		_wordlist = new WordList(_file, _file.getName());
 		
 	}
 
@@ -229,7 +230,7 @@ public class Menu extends JPanel {
 		int size = levels.length;
 		try {
 			for (int i = 0; i < size; i++) {
-				File accuracy = new File(".accuracy_" + levels[i]);
+				File accuracy = new File("." + _fileName + "_" + levels[i]);
 				if (! accuracy.exists()) {
 					accuracy.createNewFile();
 

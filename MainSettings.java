@@ -64,7 +64,7 @@ public class MainSettings extends JPanel {
 		//set up buttons and labels
 		this.setLayout(null);
 		this.setBackground(new Color(255, 255, 153));
-		
+
 		JLabel lblTile = new JLabel("Settings");
 		lblTile.setHorizontalAlignment(SwingConstants.CENTER);
 		lblTile.setFont(new Font("Calibri Light", Font.PLAIN, 35));
@@ -79,6 +79,9 @@ public class MainSettings extends JPanel {
 		JToggleButton toggleButton = new JToggleButton("");
 		toggleButton.setIcon(new ImageIcon("mute2.png"));
 		toggleButton.setBounds(500, 84, 57, 40);
+		if(! _sound.isActive()) {
+			toggleButton.setSelected(true);
+		}
 		toggleButton.addItemListener(new ItemListener() { //This button stops or plays background music 
 
 			@Override
@@ -109,30 +112,27 @@ public class MainSettings extends JPanel {
 		this.add(lblCurrentList);
 
 		lblCurrentFile.setFont(new Font("Arial", Font.PLAIN, 24));
-		lblCurrentFile.setBounds(500, 256, 230, 22);
+		lblCurrentFile.setBounds(500, 256, 320, 30);
 		//File choose allows users to select their own lists
 		final JFileChooser fc = new JFileChooser();
 
 		JButton btnSelectList = new JButton("Select Spelling List"); //pressing this button opens up file chooser
 		btnSelectList.setFont(new Font("Arial", Font.PLAIN, 18));
-		btnSelectList.setBounds(500, 300, 210, 30);
+		btnSelectList.setBounds(500, 300, 210, 40);
 		btnSelectList.setBackground(new Color(255,153, 51));
 		btnSelectList.setForeground(new Color(255,255, 153));
 		btnSelectList.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) { //warning message pop if users want to change list
-				int val = JOptionPane.showConfirmDialog(null, "Warning. Changing spellings lists will clear your save files and progress. Do you wish "
-						+ "to continue", "alert", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
-				if (val == JOptionPane.OK_OPTION) {
-					int returnVal = fc.showOpenDialog(MainSettings.this);
+				int returnVal = fc.showOpenDialog(MainSettings.this);
 
-					if (returnVal == JFileChooser.APPROVE_OPTION) {
-						_file = fc.getSelectedFile();
+				if (returnVal == JFileChooser.APPROVE_OPTION) {
+					_file = fc.getSelectedFile();
 
-						lblCurrentFile.setText(_file.getName()); //get file name that the user has selected
-					}
+					lblCurrentFile.setText(_file.getName()); //get file name that the user has selected
 				}
+
 			}
 		});
 		this.add(lblCurrentFile);
@@ -150,7 +150,7 @@ public class MainSettings extends JPanel {
 				File file = _file;
 				int spinnerVal = (int) spinner.getValue();
 				try {
-					_wl = new WordList(file); //make a wordlist from the file
+					_wl = new WordList(file, file.getName()); //make a wordlist from the file
 
 				} catch (IOException e1) {
 					e1.printStackTrace();
@@ -159,7 +159,7 @@ public class MainSettings extends JPanel {
 					_level = levelSelect();    //choose a level (for new wordlist)
 					if (_level != 0) {
 						try {
-							_oldMenu.clearStats(); //clears old stats
+							//_oldMenu.clearStats(); //clears old stats
 
 							File listFile = new File(".defaultList.txt"); //change default spelling list save. So that if user boots up spelling list
 							PrintWriter pw = new PrintWriter(listFile);   //the same one which he chose opens up
@@ -196,7 +196,7 @@ public class MainSettings extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-					_wl = new WordList(_oldFile);
+					_wl = new WordList(_oldFile, _oldFile.getName());
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();

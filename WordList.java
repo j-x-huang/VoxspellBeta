@@ -25,12 +25,13 @@ public class WordList implements Serializable{
 
 	private int _level;
 	private File _file;
-	private File _saveFile = new File(".save.ser");
+	private File _saveFile;
 
 	//This constructor is for normal quiz.
-	public WordList(File file) throws IOException{
+	public WordList(File file, String saveFile) throws IOException{
 		
 		_file=file;
+		_saveFile = new File("."+saveFile+".ser");
 		if (_saveFile.exists()) {
 			try {
 				ObjectInputStream ois = new ObjectInputStream(new FileInputStream(_saveFile));

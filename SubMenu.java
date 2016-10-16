@@ -176,18 +176,18 @@ public class SubMenu extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				WordList wl= null;
+				
+				Quiz q = null;
 				try {
-					wl = new WordList(_file);
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
+					int nextLevel = _wordList.getNextLevel(_level);
+					q = new Quiz(_wordList, nextLevel, _main, _maxNum, _file, _sound);
+				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
-				int nextLevel = wl.getNextLevel(_level);
+				_main.getContentPane().add(q);
 				setVisible(false);
-				Menu menu = new Menu(nextLevel, _main, _wordList, _maxNum, _file, _sound );
-				_main.getContentPane().add(menu);
-				menu.setVisible(true);
+				q.setVisible(true);
+				
 			}
 
 		});
@@ -206,14 +206,8 @@ public class SubMenu extends JPanel {
 				int coin = getCoins();
 				if ((coin - 1000) > 0) {
 					updateCoins(coin - 1000);
-					WordList wl= null;
-					try {
-						wl = new WordList(_file);
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-					int nextLevel = wl.getNextLevel(_level);
+					
+					int nextLevel = _wordList.getNextLevel(_level);
 					setVisible(false);
 					Menu menu = new Menu(nextLevel, _main, _wordList, _maxNum, _file, _sound );
 					_main.getContentPane().add(menu);
