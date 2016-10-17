@@ -110,12 +110,7 @@ public class Menu extends JPanel {
 
 			}
 		});
-		quizBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		quizBtn.setFont(new Font("Arial Black", Font.PLAIN, 20));
-		quizBtn.setBorder(new MatteBorder(3,3,3,3, new Color(0,0,0)));
-		quizBtn.setBounds(313, 147, 220, 69);
-		quizBtn.setBackground(new Color(255,153, 51));
-		quizBtn.setForeground(new Color(255,255, 153));
+		setButtonDesign(147, quizBtn);
 		this.add(quizBtn);
 
 		JButton statsBtn = new JButton("View Statistics");
@@ -124,13 +119,7 @@ public class Menu extends JPanel {
 				makeTable();
 			}
 		});
-		statsBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		statsBtn.setFont(new Font("Arial Black", Font.PLAIN, 20));
-		statsBtn.setBorder(new MatteBorder(3,3,3,3, new Color(0,0,0)));
-		statsBtn.setBounds(313, 247, 220, 69);
-		statsBtn.setBackground(new Color(255,153, 51));
-		statsBtn.setForeground(new Color(255,255, 153));
-		
+		setButtonDesign(247, statsBtn);
 		this.add(statsBtn);
 		//Functionality to clear statistics button
 		JButton clearBtn = new JButton("Clear Statistics");
@@ -149,12 +138,7 @@ public class Menu extends JPanel {
 				}
 			}
 		});
-		clearBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		clearBtn.setFont(new Font("Arial Black", Font.PLAIN, 20));
-		clearBtn.setBorder(new MatteBorder(3,3,3,3, new Color(0,0,0)));
-		clearBtn.setBounds(313, 347, 220, 69);
-		clearBtn.setBackground(new Color(255,153, 51));
-		clearBtn.setForeground(new Color(255,255, 153));
+		setButtonDesign(347, clearBtn);
 		this.add(clearBtn);
 
 		lblLevel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -174,18 +158,20 @@ public class Menu extends JPanel {
 			}
 
 		});
-		settingsBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		settingsBtn.setFont(new Font("Arial Black", Font.PLAIN, 20));
-		settingsBtn.setBorder(new MatteBorder(3,3,3,3, new Color(0,0,0)));
-		settingsBtn.setBounds(313, 447, 220, 69);
-		settingsBtn.setBackground(new Color(255,153, 51));
-		settingsBtn.setForeground(new Color(255,255, 153));
+		setButtonDesign(447, settingsBtn);
 		this.add(settingsBtn);
 
 
 	}
 
-
+	private void setButtonDesign(int height, JButton btn) {
+		btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btn.setFont(new Font("Arial Black", Font.PLAIN, 20));
+		btn.setBorder(new MatteBorder(3,3,3,3, new Color(0,0,0)));
+		btn.setBounds(313, height, 220, 69);
+		btn.setBackground(new Color(255,153, 51));
+		btn.setForeground(new Color(255,255, 153));
+	}
 
 	public void setTitle(){
 		lblLevel.setText("Level "+_level);

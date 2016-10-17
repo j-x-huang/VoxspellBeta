@@ -2,6 +2,8 @@ package beta;
 
 import java.awt.CardLayout;
 import java.awt.EventQueue;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -26,11 +28,21 @@ public class Main extends JFrame{
 
 	public Main() {
 		//Set up frame
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		setBounds(100, 100, 850, 630);
 		setResizable(false);
+		
+		this.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent we) {
+				int clear = JOptionPane.showConfirmDialog (null, "Are you sure you want to exit Voxspell?\nLeaving "
+						+ "during a quiz may cause some statistics to not save.","Warning",JOptionPane.YES_NO_OPTION);
+				if(clear == JOptionPane.YES_OPTION){
+					System.exit(0);
+				}
+			}
+		});
 		contentPane = new JPanel();
-
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(new CardLayout(0, 0));

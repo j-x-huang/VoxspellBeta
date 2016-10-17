@@ -101,12 +101,7 @@ public class SubMenu extends JPanel {
 				menu.setVisible(true);
 			}
 		});
-		btnReturnToMenu.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		btnReturnToMenu.setFont(new Font("Arial Black", Font.PLAIN, 20));
-		btnReturnToMenu.setBorder(new MatteBorder(3,3,3,3, new Color(0,0,0)));
-		btnReturnToMenu.setBounds(323, 252, 200, 69);
-		btnReturnToMenu.setBackground(new Color(255,153, 51));
-		btnReturnToMenu.setForeground(new Color(255,255, 153));
+		setButtonDesign(252, btnReturnToMenu);
 		this.add(btnReturnToMenu);
 		//this button lets users repeat quiz
 		btnRepeatQuiz.addActionListener(new ActionListener() {
@@ -125,12 +120,7 @@ public class SubMenu extends JPanel {
 			}
 
 		});
-		btnRepeatQuiz.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		btnRepeatQuiz.setFont(new Font("Arial Black", Font.PLAIN, 20));
-		btnRepeatQuiz.setBorder(new MatteBorder(3,3,3,3, new Color(0,0,0)));
-		btnRepeatQuiz.setBounds(323, 342, 200, 69);
-		btnRepeatQuiz.setBackground(new Color(255,153, 51));
-		btnRepeatQuiz.setForeground(new Color(255,255, 153));
+		setButtonDesign(343, btnRepeatQuiz);
 		this.add(btnRepeatQuiz);
 		
 		//Makes statistics panel visible
@@ -143,12 +133,7 @@ public class SubMenu extends JPanel {
 			}
 
 		});
-		btnViewStatistics.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		btnViewStatistics.setFont(new Font("Arial Black", Font.PLAIN, 20));
-		btnViewStatistics.setBorder(new MatteBorder(3,3,3,3, new Color(0,0,0)));
-		btnViewStatistics.setBounds(323, 432, 200, 69);
-		btnViewStatistics.setBackground(new Color(255,153, 51));
-		btnViewStatistics.setForeground(new Color(255,255, 153));
+		setButtonDesign(432, btnViewStatistics);
 		this.add(btnViewStatistics);
 		
 		//This button only appears if users scored at least 90%
@@ -163,12 +148,7 @@ public class SubMenu extends JPanel {
 			}
 
 		});
-		btnWatchVideo.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		btnWatchVideo.setFont(new Font("Arial Black", Font.PLAIN, 20));
-		btnWatchVideo.setBorder(new MatteBorder(3,3,3,3, new Color(0,0,0)));
-		btnWatchVideo.setBounds(323, 522, 200, 69);
-		btnWatchVideo.setBackground(new Color(255,153, 51));
-		btnWatchVideo.setForeground(new Color(255,255, 153));
+		setButtonDesign(522, btnWatchVideo);
 		
 		//This button only appears if users scored at least 90%
 		//allows users to do quizzes at the next level (if possible)
@@ -191,12 +171,8 @@ public class SubMenu extends JPanel {
 			}
 
 		});
-		btnAdvance.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		btnAdvance.setFont(new Font("Arial Black", Font.PLAIN, 20));
-		btnAdvance.setBorder(new MatteBorder(3,3,3,3, new Color(0,0,0)));
-		btnAdvance.setBounds(323, 162, 200, 69);
-		btnAdvance.setBackground(new Color(255,153, 51));
-		btnAdvance.setForeground(new Color(255,255, 153));
+		setButtonDesign(162, btnAdvance);
+
 		//This button allows users to purchase using the coins the next level
 		// so they can start doing quizzes at a higher level. Only appears if
 		// user scored <90%
@@ -218,12 +194,7 @@ public class SubMenu extends JPanel {
 			}
 
 		});
-		btnCoins.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		btnCoins.setFont(new Font("Arial Black", Font.PLAIN, 20));
-		btnCoins.setBorder(new MatteBorder(3,3,3,3, new Color(0,0,0)));
-		btnCoins.setBounds(323, 162, 200, 69);
-		btnCoins.setBackground(new Color(255,153, 51));
-		btnCoins.setForeground(new Color(255,255, 153));
+		setButtonDesign(162 ,btnCoins);
 
 		if (_advance) {
 			this.add(btnWatchVideo);
@@ -234,6 +205,17 @@ public class SubMenu extends JPanel {
 		
 		_wordList.saveData();
 
+	}
+	
+	private void setButtonDesign(int height, JButton btn) {
+		btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btn.setFont(new Font("Arial Black", Font.PLAIN, 20));
+		btn.setBorder(new MatteBorder(3,3,3,3, new Color(0,0,0)));
+		btn.setBounds(334, height, 200, 69);
+		btn.setBackground(new Color(255,153, 51));
+		btn.setForeground(new Color(255,255, 153));
+
+		
 	}
 	//makes table panel visible
 	private void makeTable() {

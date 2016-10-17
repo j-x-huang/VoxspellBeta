@@ -234,7 +234,7 @@ public class Quiz extends JPanel implements ActionListener {
 		_frame.getRootPane().setDefaultButton(btnSubmit); //make submit default button
 		//Word to be tested
 		setTestList(_wordlist);
-		festival("Spell " + _testList.get(_testNo-1).toString());
+		festival("Spell " + _testList.get(_testNo-1).toString(), null);
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -247,7 +247,7 @@ public class Quiz extends JPanel implements ActionListener {
 			JButton button = (JButton) e.getSource();  
 			if (button.equals(btnListenAgain)){  
 
-				festival(_testList.get(_testNo-1).toString());
+				festival(_testList.get(_testNo-1).toString(), btnListenAgain);
 				return;
 			}
 			//If user is correct
@@ -300,7 +300,7 @@ public class Quiz extends JPanel implements ActionListener {
 				if(incorrect<1){
 					//Setting message to the user about the fault
 					lblCorrect.setText("Incorrect. Try again");
-					festival("Incorrect!! Spell"+_testList.get(_testNo-1).toString()+".");
+					festival("Incorrect!! Spell"+_testList.get(_testNo-1).toString()+".", btnSubmit);
 					//Word is spoken again.
 					incorrect++;
 					textField.setText("");
@@ -339,7 +339,7 @@ public class Quiz extends JPanel implements ActionListener {
 			if((_testNo==_maxNum+1)||(_wc<_testNo)){
 				//Telling the user the teset is finished
 				lblCorrect.setText(_correctness+" Quiz Finished!!");
-				festival(lblCorrect.getText());
+				festival(lblCorrect.getText(), null);
 				//Update high score
 				if (_correct > _highScore) {
 					_highScore = _correct;
@@ -353,7 +353,7 @@ public class Quiz extends JPanel implements ActionListener {
 
 			}else{
 				//Continue the quiz
-				festival(_correctness+" Spell "+_testList.get(_testNo-1).toString()+".");
+				festival(_correctness+" Spell "+_testList.get(_testNo-1).toString()+".", btnSubmit);
 			}
 		}catch(Exception excep){
 			excep.printStackTrace();
@@ -363,7 +363,7 @@ public class Quiz extends JPanel implements ActionListener {
 	//Function that allows user to change the voice of festival.
 	private void getVoices() throws Exception{
 
-		Festival f = new Festival("","");
+		Festival f = new Festival("","1");
 		_voices = f.listOfVoices();
 
 	}
@@ -385,12 +385,16 @@ public class Quiz extends JPanel implements ActionListener {
 
 
 	//Method that uses festival to speak out the string passed into it
-	private void festival(String tts) throws Exception{
-		Festival say = new Festival(tts,_voice);
+	private void festival(String tts, JButton btn) throws Exception{
+		if (btn != null) {
+			btn.setEnabled(false);
+		}
+		Festival say = new Festival(tts,_voice, btn);
 		say.execute();
 
 	}
-
+	
+	/*
 	//Speaking out the spelling of the word passed into it
 	private void festivalAlphabet(String tts) throws Exception{
 		String word="";
@@ -399,7 +403,7 @@ public class Quiz extends JPanel implements ActionListener {
 		for(int i=0;i<alpha.length;i++)
 			word = word + alpha[i]+" ";
 		festival(word);
-	}
+	}*/
 
 
 	
@@ -477,15 +481,6 @@ public class Quiz extends JPanel implements ActionListener {
 		bw.write(_highScore + "\n");
 		bw.close();
 	}
-
-	//makes statistics table visible
-	private void makeTable() {
-		ViewAccuracy va = new ViewAccuracy(_wordlist, this);
-
-		_frame.getContentPane().add(va);
-		this.setVisible(false);
-		va.setVisible(true);
-	}
 	
 	//makes the streak label flash several times
 	private void blink() {
@@ -546,7 +541,7 @@ public class Quiz extends JPanel implements ActionListener {
 			lblChangeVoice.setBounds(25, 130, 135, 24);
 			contentPane.add(lblChangeVoice);
 
-			String[] voices = _voices.toArray(new String[_voices.size()]); //get the list of voices installed on users computer
+			String[] voices = {"New Zealander","American", "British"}; //get the list of voices installed on users computer
 
 			final JComboBox<String> comboBox = new JComboBox<String>(voices);
 			comboBox.setBounds(220, 125, 210, 30);
@@ -591,7 +586,12 @@ public class Quiz extends JPanel implements ActionListener {
 			btnOK.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					String data = (String) comboBox.getItemAt(comboBox.getSelectedIndex());
-					_voice = data;
+					if (data.equals("New Zealander"))
+						_voice = _voices.get(0);
+					else if (data.equals("American"))
+						_voice = _voices.get(1);
+					else 
+						_voice = _voices.get(2);
 					dispose();
 				}
 			});
