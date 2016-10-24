@@ -25,11 +25,11 @@ public class PieModel {
 	}
 	
 	protected JPanel getPieChart() {
-		JFreeChart chart = PieChart(newPieDataset());
+		JFreeChart chart = PieChart(pieData());
 		return new ChartPanel(chart);
 		
 	}
-	private PieDataset newPieDataset(){
+	private PieDataset pieData(){
 		
 		DefaultPieDataset dataset = new DefaultPieDataset();
 		dataset.setValue("Correct", new Double(_correct));
